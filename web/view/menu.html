@@ -1,0 +1,150 @@
+<style>
+    html,body{
+        padding: 0;
+        margin: 0;
+    }
+    .nav {
+        width: 100%;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        z-index: 1000;
+        padding: 0;
+    }
+
+    .nav__menu-btn {
+        width: 30px;
+        height: 30px;
+        display: inline-block;
+        background-image: url("../static/img/menu.png");
+        background-size: cover;
+        cursor: pointer;
+        position: absolute;
+        top: 0px;;
+        left: 60px;
+    }
+    .nav__menu-btn--transition {
+        transition: 0.5s;
+    }
+
+    .nav--active .nav__menu-btn {
+        transform: rotate(90deg);
+    }
+
+    .nav__menu {
+        display: none;
+        list-style: none;
+        padding: 0;
+        position: absolute;
+        top:10px;
+        left: 110px;
+        margin: 0;
+    }
+
+    .nav--active .nav__menu {
+        display: inline-block;
+        width: 700px;
+        overflow: hidden;
+    }
+
+    .nav__menu--item {
+        display: inline-block;
+        color: #FFF;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 20px;
+        padding: 0 15px;
+    }
+
+    .nav__menu--item a {
+        color: #FFF;
+        text-decoration: none;
+    }
+
+    .nav__menu--item.active a {
+        color: rgb(255, 64, 138);
+    }
+
+    .language {
+        display: inline-block;
+        float: right;
+        margin-right: 50px;
+    }
+
+    .language__logo {
+        width: 70px;
+        text-align: center;
+        cursor: pointer;
+        margin-bottom: 10px;
+    }
+
+    .language__logo img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .language__item {
+        width: 70px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 12px;
+        line-height: 30px;
+        display: none;
+        margin: 0;
+    }
+
+    .language__item a {
+        color: #FFF;
+        text-decoration: none;
+    }
+</style>
+<div class="nav">
+    <span class="nav__menu-btn"></span>
+    <ul class="nav__menu">
+        <%menus.forEach(function(menu){%>
+             <%if(menu.router==router){%>
+                <li class="nav__menu--item active"><a href="javascript:void(0)"><%=menu.text%></a></li>
+            <%}else{%>
+                <li class="nav__menu--item"><a href="<%=menu.router%>"><%=menu.text%></a></li>
+            <%}%>
+        <%})%>
+    </ul>
+    <dl class="language">
+        <dt class="language__logo">
+            <img src="../static/img/language.png" alt="">
+        </dt>
+        <dd class="language__item"><a href="cn">中文</a></dd>
+        <dd class="language__item"><a href="en">English</a></dd>
+    </dl>
+</div>
+
+<script>
+    $(function () {
+        $(".nav__menu-btn").click(function () {
+            $('.nav').toggleClass("nav--active")
+            if($('.nav').hasClass("nav--active")){
+                window.localStorage.setItem("showMenu",1)
+            }else{
+                window.localStorage.setItem("showMenu",0)
+            }
+        })
+        $(".language__logo img").click(function () {
+            $('.language__item').show()
+            return false
+        })
+        $(document).click(function (e) {
+            if(e.target.className.indexOf("language")!=0){
+                $('.language__item').hide()
+            }
+        })
+
+
+        if(window.localStorage.showMenu=="1"){
+            $('.nav').addClass("nav--active")
+        }
+        setTimeout(function () {
+            $('.nav__menu-btn').addClass("nav__menu-btn--transition")
+        },100)
+
+    })
+</script>

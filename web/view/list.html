@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <%menus.forEach(function(menu){%>
+    <%if(menu.router==router){%>
+    <title><%=menu.text%></title>
+    <%}%>
+    <%})%>
+    <script src="../static/js/jquery-1.10.1.min.js"></script>
+    <style>
+        html,body{
+            background-size:100% ;
+            background-repeat: no-repeat;
+            padding: 0;
+            margin: 0;
+        }
+        .bg {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-image: url("../static/img/4.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            filter: blur(20px);
+            z-index: 1;
+        }
+        .warp{
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+            text-align: center;
+            background: rgba(255,255,255,0);
+            position: absolute;
+            z-index: 10;
+            padding-top: 150px;
+            box-sizing: border-box;
+
+        }
+        .workList__list {
+            display: block;
+            list-style: none;
+        }
+
+        .workList__list:after {
+            content: '';
+            display: block;
+            visibility: hidden;
+            clear: both;
+        }
+
+        .workList__item {
+            display: inline-block;
+            margin: 20px;
+            float: left;
+            position: relative;
+            overflow: hidden;
+            background: #F0F0EE;
+        }
+
+        .workList__img__wrap {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            transition: ease-in 0.5s;
+        }
+
+        .workList__font__wrap {
+            position: absolute;
+            left: 10px;
+            right: 10px;
+            top: 10px;
+            bottom: 10px;
+            z-index: 10;
+            background: #000;
+            opacity: 0;
+            transition: ease-in 0.5s;
+
+        }
+
+        .workList__font {
+            color: #fff;
+            text-align: center;
+            padding: 0 20px;
+            font-size: 16px;
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+
+        .workList__item:hover .workList__img__wrap {
+            transform: scale(1.05);
+        }
+
+        .workList__item:hover .workList__font__wrap {
+            opacity: 0.5;
+        }
+
+        .workList__item:after {
+            content: '';
+            display: block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #c7ccd1;
+            border-left-color: #6c6c6c;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin: -11px 0 0 -11px;
+            animation-name: loading;
+            animation-duration: 0.5s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+
+        .workList__item.done:after {
+            display: none;
+        }
+
+        .workList__lazy {
+            display: none;
+        }
+
+        @keyframes loading {
+            from {
+                transform: rotate(0deg);
+                -webkit-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+
+            }
+            to {
+                transform: rotate(360deg);
+                -webkit-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+            }
+        }
+
+        .fadeIn {
+            opacity: 0;
+            -webkit-transition: opacity 1s cubic-bezier(0.215, 0.61, 0.355, 1), -webkit-transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+            transition: opacity 1s cubic-bezier(0.215, 0.61, 0.355, 1), transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+            transform: scale(1.05)
+        }
+
+        .fadeIn.is-visible {
+            opacity: 1;
+            -webkit-transform: scale(1);
+            transform: scale(1);
+        }
+
+    </style>
+    <script>
+        $(function () {
+            initPage()
+            $(window).resize(initPage)
+            var time = 0
+            $('.workList__item').each(function () {
+                -function (el) {
+                    setTimeout(function () {
+                        $(el).addClass("is-visible")
+                    }, time += 300)
+                }(this)
+            })
+
+        })
+
+
+        function initPage() {
+            var width = ($(".workList__list").width() - 140) / 3
+            var height = width / 3 * 2, bigHeight = width * 1.5
+            $('.workList__item').width(width).height(height)
+            $('.workList__item[size=big]').height(bigHeight)
+        }
+        function loadImg(e) {
+            $(e.target).parents("li").addClass("done").find(".workList__img__wrap").css("backgroundImage", 'url(' + e.target.src + ')')
+        }
+    </script>
+</head>
+<body>
+<% include menu.html %>
+<div class="bg"></div>
+<div class="warp">
+    <ul class="workList__list" id="list">
+        <% list.forEach(function(item){ %>
+        <li class="workList__item fadeIn" size="<%=item.size %>">
+            <a href="<%=item.id %>">
+                <div class="workList__img__wrap"></div>
+                <div class="workList__font__wrap">
+                    <span class="workList__font"><%=item.content %></span>
+                </div>
+            </a>
+            <img src="<%=item.img %>" class="workList__lazy" onload="loadImg(event)">
+        </li>
+        <% }); %>
+    </ul>
+</div>
+
+</body>
+</html>

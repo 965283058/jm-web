@@ -1,0 +1,8 @@
+*/node_modules
+*/npm-debug.log
+*/.idea
+*/bin
+*/package-lock.json
+.idea
+bin
+*/static/upload

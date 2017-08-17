@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <%menus.forEach(function(menu){%>
+        <%if(menu.router==router){%>
+            <title><%=menu.text%></title>
+        <%}%>
+    <%})%>
+    <script src="../static/js/jquery-1.10.1.min.js"></script>
+    <style>
+        html,body{
+            background-size:100% ;
+            background-repeat: no-repeat;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            font: 12px/1.5 "Microsoft YaHei","PingFang SC","Helvetica Neue",Helvetica,Arial,sans-serif;
+        }
+        .bg {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-image: url("../static/img/1.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            filter: blur(35px);
+            z-index: 1;
+        }
+        .warp{
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+            text-align: center;
+            background: rgba(255,255,255,0);
+            position: absolute;
+            z-index: 10;
+        }
+        .content{
+            width:960px;
+            margin: 190px auto 0;
+            text-align: left;
+        }
+        .content__img{
+            float: left;
+            margin-bottom: 30px;
+        }
+        .content__item {
+            float: right;
+            display: block;
+            width: 400px;
+            padding: 0;
+            margin-top: 30px;
+            padding-right: 55px;
+            background-repeat: no-repeat;
+            background-position: right center;
+        }
+        .content__item--first{
+            margin-top: 240px;
+        }
+        .content__item--address{
+            background-image: url("../static/img/address_logo.png");
+            background-size: 35px 45px;
+            background-repeat: no-repeat;
+        }
+        .content__item--tel{
+            background-image: url("../static/img/tel_logo.png");
+            background-size: 43px 34px;
+        }
+        .content__item--email{
+            background-image: url("../static/img/email_logo.png");
+            background-size: 45px 30px;
+        }
+        .content__item--weibo{
+            background-image: url("../static/img/weibo_logo.png");
+            background-size: 40px 35px;
+        }
+        .content__item--text{
+            color: rgb(255, 64, 138);
+            font-size: 18px;
+            line-height: 25px;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .content a{
+            color: rgb(255, 64, 138);
+            text-decoration: none;
+        }
+    </style>
+
+</head>
+<body>
+<% include menu.html %>
+<div class="bg">
+</div>
+<div class="warp">
+    <div class="content">
+        <img src="../static/img/contact.png" class="content__img">
+        <div class="content__item content__item--first content__item--address">
+            <div class="content__item--text"><%=data.address[0]%></div>
+            <div class="content__item--text"><%=data.address[1]%></div>
+        </div>
+        <div class="content__item content__item--tel">
+            <div class="content__item--text"><%=data.tel[0]%></div>
+            <div class="content__item--text"><%=data.tel[1]%></div>
+        </div>
+        <div class="content__item content__item--email">
+            <div class="content__item--text"><a href="mailto:<%=data.email[0]%>"><%=data.email[0]%></a></div>
+            <div class="content__item--text"><a href="mailto:<%=data.email[1]%>"><%=data.email[1]%></a></div>
+        </div>
+        <div class="content__item content__item--weibo">
+            <a href="<%=data.weiboUrl %>" target="_blank">
+                <div class="content__item--text"><%=data.weibo[0]%></div>
+                <div class="content__item--text"><%=data.weibo[1]%></div>
+            </a>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

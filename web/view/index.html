@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <%menus.forEach(function(menu){%>
+    <%if(menu.router==router){%>
+    <title><%=menu.text%></title>
+    <%}%>
+    <%})%>
+  <meta name="description" content="姜萌">
+  <link rel="stylesheet" href="../static/css/idangerous.swiper.css">
+    <script src="../static/js/jquery-1.10.1.min.js"></script>
+    <script src="../static/js/idangerous.swiper.min.js"></script>
+    <style>
+        @-webkit-keyframes fadeInDown {
+            0% {
+                opacity: 0;
+                -webkit-transform: translate3d(0,-100%,0);
+                transform: translate3d(0,-100%,0)
+            }
+
+            100% {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none
+            }
+        }
+
+        @keyframes fadeInDown {
+            0% {
+                opacity: 0;
+                -webkit-transform: translate3d(0,-100%,0);
+                -ms-transform: translate3d(0,-100%,0);
+                transform: translate3d(0,-100%,0)
+            }
+
+            100% {
+                opacity: 1;
+                -webkit-transform: none;
+                -ms-transform: none;
+                transform: none
+            }
+        }
+        @-webkit-keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0)
+            }
+            100% {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none
+            }
+        }
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                -webkit-transform: translate3d(0, 100%, 0);
+                -ms-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0)
+            }
+            100% {
+                opacity: 1;
+                -webkit-transform: none;
+                -ms-transform: none;
+                transform: none
+            }
+        }
+
+        *{
+            padding:0;
+            margin:0;
+        }
+        html,body,.swiper-container,.swiper-wrapper,.swiper-slide{
+            width:100%;
+            height:100%;
+        }
+        html{
+            font: 12px/1.5 "Microsoft YaHei","PingFang SC","Helvetica Neue",Helvetica,Arial,sans-serif;
+        }
+        img{
+            vertical-align: middle;
+        }
+        a{
+            text-decoration:none;
+        }
+        .swiper-slide{background-position:50% 50%;
+            position:relative;
+            background-size: cover;
+            background-repeat: no-repeat;}
+        .pagination{
+            position: fixed;
+            z-index: 100;
+            margin-top: -81.5px;
+            top: 50%;
+            right:17px;
+        }
+        .swiper-pagination-switch{
+            width:11px;
+            height:11px;
+            background: #fff;
+            border-radius:50%;
+            display:block;
+            margin:7px 7px 13px;
+            cursor:pointer;
+        }
+        .swiper-active-switch{
+            background:rgb(255,64,138);
+        }
+        .logo{
+            position: absolute;
+            left: 50%;
+            bottom: 0px;
+            margin-left: -150px;
+        }
+        .logo img{
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <% include menu.html %>
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+          <%bannerList.forEach(function(item){%>
+            <div class="swiper-slide" style="background-image: url('<%=item.img%>')">
+                <a href="#" class="logo"><img src="../static/img/logo.png"></a>
+            </div>
+          <%})%>
+      </div>
+    </div>
+    <div class="pagination"></div>
+  <script>
+      window.onload = function () {
+          var mySwiper = new Swiper('.swiper-container', {
+              speed: 400,
+              mode: 'vertical',
+              resistance: '100%',
+              loop: true,
+              mousewheelControl: true,
+              mousewheelControlForceToAxis:true,
+              grabCursor: true,
+              pagination: '.pagination',
+              paginationClickable: true,
+              keyboardControl:true
+          })
+      }
+  </script>
+</body>
+</html>

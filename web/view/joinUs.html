@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <%menus.forEach(function(menu){%>
+    <%if(menu.router==router){%>
+    <title><%=menu.text%></title>
+    <%}%>
+    <%})%>
+    <script src="../static/js/jquery-1.10.1.min.js"></script>
+    <style>
+        html,body{
+            background-size:100% ;
+            background-repeat: no-repeat;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            font: 12px/1.5 "Microsoft YaHei","PingFang SC","Helvetica Neue",Helvetica,Arial,sans-serif;
+        }
+        .bg {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-image: url("../static/img/1.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            filter: blur(25px);
+            z-index: 1;
+        }
+        .warp{
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+            text-align: center;
+            background: rgba(255,255,255,0);
+            position: absolute;
+            z-index: 10;
+
+        }
+        .content{
+            width: 830px;
+            margin: 320px auto 0;
+            text-align: left;
+            padding-bottom: 40px;
+        }
+        .content__item {
+            display: block;
+            padding: 0;
+            margin-top: 40px;
+        }
+        .content__item--title{
+            color: #ffffff;
+            font-size: 18px;
+            line-height: 30px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .content__item--text{
+            color: rgb(255, 64, 138);
+            font-size: 16px;
+            line-height: 20px;
+
+
+        }
+    </style>
+
+</head>
+<body>
+<% include menu.html %>
+<div class="bg">
+
+</div>
+<div class="warp">
+    <div class="content">
+        <% content.forEach(function(item){ %>
+        <div class="content__item">
+            <%if(item.children&&item.children.length){%>
+                <div class="content__item--title"><%=item.title%></div>
+                <% item.children.forEach(function(text){ %>
+                <div class="content__item--text"> <%=text%></div>
+                <% }); %>
+            <%}else{%>
+            <div class="content__item--text"> <%=item.title%></div>
+            <%}%>
+        </div>
+        <% }); %>
+    </div>
+</div>
+</body>
+</html>
