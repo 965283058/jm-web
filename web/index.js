@@ -6,7 +6,9 @@ let path = require('path')
 let static = require('koa-static')
 let menu = require('./app/controllers/menu')
 const koaBody = require('koa-body')
+const queryString = require('./app/utils/queryString')
 const session = require('koa-session')
+
 render(app, {
     root: path.join(__dirname, 'view'),
     layout: false,
@@ -16,23 +18,7 @@ render(app, {
 });
 app.use(static(__dirname))
 app.use(koaBody({multipart: true}))
-app.use(async(ctx, next)=> {
-    if (ctx.req.method == "GET") {
-        let body = {}
-        if (ctx.request.url.indexOf('?') != -1) {
-            let query = ctx.request.url.split('?')[1]
-            let params = query.split("&")
-
-            let temp
-            params.forEach((item)=> {
-                temp = item.split('=')
-                body[temp[0]] = temp[1] || ''
-            })
-        }
-        ctx.req.body = body
-    }
-    await next()
-})
+app.use(queryString)
 app.keys = ['some secret hurr'];
 
 app.use(session({
@@ -48,7 +34,7 @@ app.use(async(ctx, next)=> {
     if (!ctx.session.language) {
         ctx.session.language = 'cn'
     }
-    let oldPath = ctx.request.header.referer
+    let oldPath = ctx.request.header.referer||'/'
     if (ctx.request.url == "/cn") {
         ctx.session.language = 'cn'
         ctx.redirect(oldPath)

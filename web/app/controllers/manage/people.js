@@ -1,8 +1,10 @@
 var db = require("../../db/Schema");
 var file = require("../../utils/file")
+var util = require("../../utils/index")
+
 module.exports.list = async(ctx, next)=> {
-    let page = Number.parseInt(ctx.req.body.page) || 1
-    let rows = Number.parseInt(ctx.req.body.rows) || 1
+    let page = Number.parseInt(ctx.request.body.page) || 1
+    let rows = Number.parseInt(ctx.request.body.rows) || 1
     let total = await db.Prople.count()
 
     let list = await db.Prople.find().sort({"index": 1}).limit(rows).skip((page - 1) * rows)
@@ -43,7 +45,7 @@ module.exports.edit = async(ctx, next)=> {
     if (img) {
         let imgPath = ctx.request.body.files.img.path //requset中的图片存放地址
         let ext = ctx.request.body.files.img.name.split(".").pop()
-        webPath = '/static/upload/peoples/' + file.guid() + "." + ext //网站文件图片存放地址
+        webPath = '/static/upload/peoples/' + util.guid() + "." + ext //网站文件图片存放地址
         moveResult = await file.move(imgPath, process.cwd() + webPath) //从临时目录移动到网站目录,成功返回1，失败返回error对象
     }
 

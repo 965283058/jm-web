@@ -1,0 +1,29 @@
+module.exports = async(ctx, next)=> {
+    if (ctx.req.method == "GET") {
+        let body = {}
+        if (ctx.request.url.indexOf('?') != -1) {
+            let query = ctx.request.url.split('?')[1]
+            let params = query.split("&")
+
+            let temp
+            params.forEach((item)=> {
+                temp = item.split('=')
+                temp[0] = decodeURI(temp[0])
+                temp[1] = decodeURI(temp[1])
+                if (temp[0].indexOf('[]') > 0) {
+                    let key = temp[0].replace('[]', '')
+                    if (body[key]) {
+                        body[key].push(temp[1])
+                    } else {
+                        let key = temp[0].replace('[]', '')
+                        body[key] = [(temp[1] || '')]
+                    }
+                } else {
+                    body[temp[0]] = temp[1] || ''
+                }
+            })
+        }
+        ctx.request.body = body
+    }
+    await next()
+}

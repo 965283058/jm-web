@@ -1,22 +1,21 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <%menus.forEach(function(menu){%>
     <%if(menu.router==router){%>
     <title><%=menu.text%></title>
     <%}%>
     <%})%>
-  <meta name="description" content="姜萌">
-  <link rel="stylesheet" href="../static/css/idangerous.swiper.css">
+    <link rel="stylesheet" href="../static/css/idangerous.swiper.css">
     <script src="../static/js/jquery-1.10.1.min.js"></script>
     <script src="../static/js/idangerous.swiper.min.js"></script>
     <style>
         @-webkit-keyframes fadeInDown {
             0% {
                 opacity: 0;
-                -webkit-transform: translate3d(0,-100%,0);
-                transform: translate3d(0,-100%,0)
+                -webkit-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0)
             }
 
             100% {
@@ -29,9 +28,9 @@
         @keyframes fadeInDown {
             0% {
                 opacity: 0;
-                -webkit-transform: translate3d(0,-100%,0);
-                -ms-transform: translate3d(0,-100%,0);
-                transform: translate3d(0,-100%,0)
+                -webkit-transform: translate3d(0, -100%, 0);
+                -ms-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0)
             }
 
             100% {
@@ -41,6 +40,7 @@
                 transform: none
             }
         }
+
         @-webkit-keyframes fadeInUp {
             0% {
                 opacity: 0;
@@ -53,6 +53,7 @@
                 transform: none
             }
         }
+
         @keyframes fadeInUp {
             0% {
                 opacity: 0;
@@ -68,84 +69,126 @@
             }
         }
 
-        *{
-            padding:0;
-            margin:0;
+        * {
+            padding: 0;
+            margin: 0;
         }
-        html,body,.swiper-container,.swiper-wrapper,.swiper-slide{
-            width:100%;
-            height:100%;
+
+        html, body, .swiper-container, .swiper-wrapper, .swiper-slide {
+            width: 100%;
+            height: 100%;
         }
-        html{
-            font: 12px/1.5 "Microsoft YaHei","PingFang SC","Helvetica Neue",Helvetica,Arial,sans-serif;
+
+        html {
+            font: 12px/1.5 "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
-        img{
+
+        img {
             vertical-align: middle;
         }
-        a{
-            text-decoration:none;
+
+        a {
+            text-decoration: none;
         }
-        .swiper-slide{background-position:50% 50%;
-            position:relative;
+
+        .swiper-slide {
+            background-position: 50% 50%;
+            position: relative;
             background-size: cover;
-            background-repeat: no-repeat;}
-        .pagination{
+            background-repeat: no-repeat;
+        }
+
+        .pagination {
             position: fixed;
             z-index: 100;
+
+        }
+        .pagination--v{
             margin-top: -81.5px;
             top: 50%;
-            right:17px;
+            right: 17px;
         }
-        .swiper-pagination-switch{
-            width:11px;
-            height:11px;
+
+        .pagination--h{
+            bottom:150px;
+            left: 0;
+            right: 0;
+            margin-top: 0;
+            margin-left: 0;
+            text-align: center;
+        }
+
+        .swiper-pagination-switch {
+            width: 11px;
+            height: 11px;
             background: #fff;
-            border-radius:50%;
-            display:block;
-            margin:7px 7px 13px;
-            cursor:pointer;
+            border-radius: 50%;
+            display: block;
+            margin: 7px 7px 13px;
+            cursor: pointer;
         }
-        .swiper-active-switch{
-            background:rgb(255,64,138);
+        .pagination--h>.swiper-pagination-switch{
+            display: inline-block;
         }
-        .logo{
+
+        .swiper-active-switch {
+            background: rgb(255, 64, 138);
+        }
+
+        .logo {
             position: absolute;
             left: 50%;
             bottom: 0px;
             margin-left: -150px;
         }
-        .logo img{
+
+        .logo img {
             width: 300px;
         }
     </style>
 </head>
 <body>
-    <% include menu.html %>
-    <div class="swiper-container">
-      <div class="swiper-wrapper">
-          <%bannerList.forEach(function(item){%>
-            <div class="swiper-slide" style="background-image: url('<%=item.img%>')">
-                <a href="#" class="logo"><img src="../static/img/logo.png"></a>
-            </div>
-          <%})%>
-      </div>
+<% include menu.html %>
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        <%bannerList.forEach(function(item){%>
+        <div class="swiper-slide" style="background-image: url('<%=item.img%>')">
+            <a href="#" class="logo"><img src="../static/img/logo.png"></a>
+        </div>
+        <%})%>
     </div>
-    <div class="pagination"></div>
-  <script>
-      window.onload = function () {
-          var mySwiper = new Swiper('.swiper-container', {
-              speed: 400,
-              mode: 'vertical',
-              resistance: '100%',
-              loop: true,
-              mousewheelControl: true,
-              mousewheelControlForceToAxis:true,
-              grabCursor: true,
-              pagination: '.pagination',
-              paginationClickable: true,
-              keyboardControl:true
-          })
-      }
-  </script>
+</div>
+<div class="pagination <%=setting.mode=='horizontal'?'pagination--h':'pagination--v'%>"></div>
+<script>
+    window.onload = function () {
+        var mySwiper = new Swiper('.swiper-container', {
+            speed: '<%=setting.speed%>',
+            autoplay: '<%=setting.autoplay%>',
+            autoplayDisableOnInteraction:<%-(setting.autoplayDisableOnInteraction=="true")%>,
+            mode: '<%=setting.mode%>',
+            resistance: '100%',
+            loop: <%-setting.loop=="true"%>,
+            mousewheelControl: true,
+            mousewheelControlForceToAxis: true,
+            grabCursor: true,
+            pagination: '.pagination',
+            paginationClickable: true,
+            keyboardControl: <%-(setting.keyboardControl=="true")%>
+        })
+
+        if('<%=setting.mode%>'=='horizontal'){
+            document.getElementsByTagName('body')[0].onwheel=function (e) {
+                if(e.deltaY>0){
+                    mySwiper.swipeNext()
+                }else{
+                    mySwiper.swipePrev()
+                }
+            }
+        }
+
+    }
+
+
+</script>
 </body>
 </html>

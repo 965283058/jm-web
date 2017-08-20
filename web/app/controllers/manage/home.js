@@ -1,5 +1,6 @@
 var db = require("../../db/Schema");
 var file = require("../../utils/file")
+var util = require("../../utils/index")
 module.exports.list = async(ctx, next)=> {
     let menus = await db.HomeBanner.find().sort({"index": 1})
     if (menus instanceof Array) {
@@ -34,7 +35,7 @@ module.exports.edit = async(ctx, next)=> {
     if (img) {
         let imgPath = ctx.request.body.files.img.path //requset中的图片存放地址
         let ext = ctx.request.body.files.img.name.split(".").pop()
-        webPath = '/static/upload/' + file.guid() + "." + ext //网站文件图片存放地址
+        webPath = '/static/upload/' + util.guid() + "." + ext //网站文件图片存放地址
         moveResult = await file.move(imgPath, process.cwd() + webPath) //从临时目录移动到网站目录,成功返回1，失败返回error对象
     }
 

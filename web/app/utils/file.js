@@ -12,15 +12,9 @@ exports.move = async(oldPath, newPath)=> {
 }
 
 
-exports.guid = ()=> {
-    function S4() {
-        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-    }
-    return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
-}
+
 
 exports.delete = (path)=> {
-    console.info(path)
     return new Promise((rev, rej)=> {
         fs.access(path,function (err,result) {
             if(err){

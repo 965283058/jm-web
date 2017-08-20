@@ -1,10 +1,7 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
-mongoose.Promise = global.Promise
+mongoose.Promise = global.Promise;
 var db = mongoose.createConnection('127.0.0.1', 'jm'); //创建一个数据库连接
-
-var MongoClient = require('mongodb').MongoClient;
-var DB_CONN_STR = 'mongodb://127.0.0.1:27017/jm';
 
 
 //前台菜单
@@ -13,7 +10,7 @@ var webMenutSchema = new Schema({
     cn: String,
     en: String,
     index: Number,  //索引
-    status:Number,  //0禁用 1正常
+    status: Number,  //0禁用 1正常
 });
 exports.webMenu = db.model('webMenu', webMenutSchema);
 
@@ -33,17 +30,17 @@ var PropleSchema = new Schema({
     cn: {
         name: String,
         longName: String,
-        title:String,
+        title: String,
         profile: String
     },
     en: {
         name: String,
         longName: String,
-        title:String,
+        title: String,
         profile: String
     },
-    index:Number,
-    status:Number //0禁用 1正常
+    index: Number,
+    status: Number //0禁用 1正常
 });
 
 
@@ -52,15 +49,49 @@ exports.Prople = db.model('Prople', PropleSchema);
 
 //加入我们
 var JoinUsSchema = new Schema({
-    index:Number,
-    status:Number, //0禁用 1正常
+    index: Number,
+    status: Number, //0禁用 1正常
     cn: {
         title: String,
-        children:Array
+        children: Array
     },
     en: {
         title: String,
-        children:Array
+        children: Array
     }
 });
 exports.JoinUs = db.model('JoinUs', JoinUsSchema);
+
+//网站配置
+var WebSettingSchema = new Schema({
+    key: {type: String, unique: true},
+    value: Object
+});
+exports.WebSetting = db.model('WebSetting', WebSettingSchema);
+
+
+//管理员
+var AdminSchema = new Schema({
+    email: {type: String, unique: true},
+    name: String,
+    pwd: String,
+    errCount: {type: Number, default: 0},
+    superAdmin: Number, // 0普通管理员 1超级管理员
+    power: [String],
+    status: Number, //-1 删除 0禁用 1正常
+    pwdStatus:{type: Number, default: 0},//0 新密码，未重置 1正常
+    creator: {type: Schema.Types.ObjectId, ref: 'Admin',default: null},
+    createTime: {type: Number, default: Date.now()},
+    lastLoginTime: Number
+});
+exports.Admin = db.model('Admin', AdminSchema);
+
+//菜单
+var MenuSchema = new Schema({
+    text: String,
+    code: String,
+    iconCls: String,
+    parentId: String,
+    index: Number
+});
+exports.Menu = db.model('Menu', MenuSchema);
