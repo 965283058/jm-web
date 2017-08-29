@@ -61,8 +61,18 @@ exports.delete = (path)=> {
 
     })
 }
+exports.exists = (path)=> {
+    return new Promise((rev, rej)=> {
+        fs.access(path, function (err, result) {
+            if (err) {
+                rev(false)
+            } else {
+                rev(true)
+            }
+        })
 
-;
+    })
+}
 
 exports.rmDir = (path)=> {
     return new Promise((rev, rej)=> {

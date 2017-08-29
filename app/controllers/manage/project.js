@@ -66,6 +66,10 @@ module.exports.edit = async(ctx, next)=> {
             let url = project.files[0].url
             let index = url.lastIndexOf('/')
             webDir = project.files[0].url.substring(0, index)
+            let exists = await file.exists(process.cwd() + webDir)
+            if(!exists){
+                await file.mkDir(process.cwd() + webDir)
+            }
         } else {
             webDir = '/static/upload/project/' + util.converToCNDate().replace('-', '').replace(' ', '').replace(':', '')
             let result = await file.mkDir(process.cwd() + webDir)
