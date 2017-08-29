@@ -41,19 +41,22 @@
         margin: 0;
     }
 
+
     .nav--active .nav__menu {
         display: inline-block;
         width: 700px;
-        overflow: hidden;
+        /*overflow: hidden;*/
     }
 
     .nav__menu--item {
+        width: auto;
         display: inline-block;
         color: #FFF;
         font-weight: bold;
         font-size: 16px;
         line-height: 20px;
         padding: 0 15px;
+        position: relative;
     }
 
     .nav__menu--item a {
@@ -62,6 +65,29 @@
     }
 
     .nav__menu--item.active a {
+        color: rgb(255, 64, 138);
+    }
+
+    .nav__child-menu{
+        position: absolute;
+        left: 50%;
+        bottom: -30px;
+        list-style: none;
+        display: block;
+        transform: translateX(-50%);
+        padding: 0;
+        display: none;
+    }
+    .nav__child-menu .nav__menu--item{
+        width: 100px;
+        padding: 0;
+        text-align: center;
+        margin: 0;
+    }
+    .nav__child-menu .nav__menu--item a{
+        color: #FFF;
+    }
+    .nav__child-menu .nav__menu--item.active a{
         color: rgb(255, 64, 138);
     }
 
@@ -103,9 +129,25 @@
     <ul class="nav__menu">
         <%menus.forEach(function(menu){%>
              <%if(menu.router==router){%>
-                <li class="nav__menu--item active"><a href="javascript:void(0)"><%=menu.text%></a></li>
+                <li class="nav__menu--item active"><a href="javascript:void(0)"><%=menu.text%></a>
+                    <%if(menu.children&&menu.children.length){%>
+                    <ul class="nav__child-menu" style="width: <%=(menu.children.length*104)%>px">
+                        <%menu.children.forEach(function(child){%>
+                        <li class="nav__menu--item"><a href="<%=menu.router%>/<%=child.type%>"><%=child.text%></a></li>
+                        <%})%>
+                    </ul>
+                    <%}%>
+                </li>
             <%}else{%>
-                <li class="nav__menu--item"><a href="<%=menu.router%>"><%=menu.text%></a></li>
+                <li class="nav__menu--item"><a href="<%=menu.router%>"><%=menu.text%></a>
+                    <%if(menu.children&&menu.children.length){%>
+                    <ul class="nav__child-menu" style="width: <%=(menu.children.length*104)%>px">
+                        <%menu.children.forEach(function(child){%>
+                        <li class="nav__menu--item"><a href="<%=menu.router%>/<%=child.type%>"><%=child.text%></a></li>
+                        <%})%>
+                    </ul>
+                    <%}%>
+                </li>
             <%}%>
         <%})%>
     </ul>
@@ -113,8 +155,8 @@
         <dt class="language__logo">
             <img src="../static/img/language.png" alt="">
         </dt>
-        <dd class="language__item"><a href="cn">中文</a></dd>
-        <dd class="language__item"><a href="en">English</a></dd>
+        <dd class="language__item"><a href="/cn">中文</a></dd>
+        <dd class="language__item"><a href="/en">English</a></dd>
     </dl>
 </div>
 
@@ -136,6 +178,9 @@
             if(e.target.className.indexOf("language")!=0){
                 $('.language__item').hide()
             }
+            if(e.target.className.indexOf("nav__child-menu")!=0&&$(e.target).parents("ul.nav__child-menu").length==0){
+                $("ul.nav__child-menu").hide()
+            }
         })
 
 
@@ -145,6 +190,19 @@
         setTimeout(function () {
             $('.nav__menu-btn').addClass("nav__menu-btn--transition")
         },100)
+
+        $(".nav__menu--item").hover(function () {
+            $(this).find("ul.nav__child-menu").show()
+        })
+        if(window.location.href.indexOf("project/")>0){
+            var type=window.location.href.split("/").pop().replace("#",'')
+            $("ul.nav__child-menu").show().find("li.nav__menu--item").each(function () {
+                if($(this).find("a").attr("href")=="/project/"+type){
+                    $(this).addClass("active")
+                    return false
+                }
+            })
+        }
 
     })
 </script>

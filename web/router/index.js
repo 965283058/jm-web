@@ -9,6 +9,10 @@ router.use('/manage',manage.routes(),manage.allowedMethods())
 
 router.get('/list',webSite.list)
 
+router.get('/project/:id',webSite.projectByType)
+
+router.get('/project',webSite.project)
+
 router.get('/teamminus',webSite.teamminus)
 
 router.get('/people',webSite.people)

@@ -7,6 +7,10 @@ let webSetting=require('../app/controllers/manage/webSetting')
 let teamminus=require('../app/controllers/manage/teamminus')
 let admin=require('../app/controllers/manage/admin')
 let menu=require('../app/controllers/manage/menu')
+let video=require('../app/controllers/manage/video')
+let project=require('../app/controllers/manage/project')
+
+
 
 router.get('/webMenu/list',webMenu.list)
 router.post('/webMenu/edit',webMenu.edit)
@@ -36,9 +40,24 @@ router.get('/admin/list',admin.list)
 router.post('/admin/edit',admin.edit)
 router.post('/admin/del',admin.del)
 router.post('/admin/resetPwd',admin.resetPwd)
+router.post('/admin/changePwd',admin.changePwd)
+
 
 
 router.get('/menu/treeMenu',menu.getTreeMenu)
 router.post('/menu/edit',menu.edit)
+
+
+router.post('/login',admin.login)
+router.post('/admin/logout',admin.logout)
+
+
+router.get('/video/list',video.list)
+router.post('/video/edit',video.edit)
+router.post('/video/del',video.del)
+
+router.get('/project/list',project.list)
+router.post('/project/edit',project.edit)
+router.post('/project/del',project.del)
 
 module.exports=router

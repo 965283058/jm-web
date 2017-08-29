@@ -6,9 +6,9 @@
   "dependencies": {
     "koa-body": "^2.3.0",
     "koa-ejs": "^4.1.0",
+    "koa-generic-session": "^2.0.0",
     "koa-multer": "^1.0.2",
     "koa-router": "^7.2.1",
-    "koa-session": "^5.5.0",
     "koa-static": "^4.0.1",
     "koa2": "^2.0.0-alpha.7",
     "mongoose": "^4.11.6"

@@ -8,13 +8,15 @@
     <%}%>
     <%})%>
     <script src="../static/js/jquery-1.10.1.min.js"></script>
+    <script src="../static/js/jquery.lazyload.min.js"></script>
     <style>
-        html,body{
-            background-size:100% ;
+        html, body {
+            background-size: 100%;
             background-repeat: no-repeat;
             padding: 0;
             margin: 0;
         }
+
         .bg {
             position: absolute;
             top: 0;
@@ -27,18 +29,20 @@
             filter: blur(20px);
             z-index: 1;
         }
-        .warp{
+
+        .warp {
             width: 100%;
             height: 100%;
             overflow-y: scroll;
             text-align: center;
-            background: rgba(255,255,255,0);
+            background: rgba(255, 255, 255, 0);
             position: absolute;
             z-index: 10;
             padding-top: 150px;
             box-sizing: border-box;
 
         }
+
         .workList__list {
             display: block;
             list-style: none;
@@ -125,7 +129,7 @@
         }
 
         .workList__lazy {
-            display: none;
+            /*display: none;*/
         }
 
         @keyframes loading {
@@ -156,32 +160,7 @@
         }
 
     </style>
-    <script>
-        $(function () {
-            initPage()
-            $(window).resize(initPage)
-            var time = 0
-            $('.workList__item').each(function () {
-                -function (el) {
-                    setTimeout(function () {
-                        $(el).addClass("is-visible")
-                    }, time += 300)
-                }(this)
-            })
 
-        })
-
-
-        function initPage() {
-            var width = ($(".workList__list").width() - 140) / 3
-            var height = width / 3 * 2, bigHeight = width * 1.5
-            $('.workList__item').width(width).height(height)
-            $('.workList__item[size=big]').height(bigHeight)
-        }
-        function loadImg(e) {
-            $(e.target).parents("li").addClass("done").find(".workList__img__wrap").css("backgroundImage", 'url(' + e.target.src + ')')
-        }
-    </script>
 </head>
 <body>
 <% include menu.html %>
@@ -190,17 +169,43 @@
     <ul class="workList__list" id="list">
         <% list.forEach(function(item){ %>
         <li class="workList__item fadeIn" size="<%=item.size %>">
-            <a href="<%=item.id %>">
+            <a href="/project/info?id=<%=item.id %>">
                 <div class="workList__img__wrap"></div>
                 <div class="workList__font__wrap">
-                    <span class="workList__font"><%=item.content %></span>
+                    <span class="workList__font"><%=item.name %></span>
                 </div>
             </a>
-            <img src="<%=item.img %>" class="workList__lazy" onload="loadImg(event)">
+            <img data-original="<%=item.img %>" class="workList__lazy" onload="loadImg(event)">
         </li>
-        <% }); %>
+        <% })%>
     </ul>
 </div>
+<script>
+    $(function () {
+        initPage()
+        $(window).resize(initPage)
+        var time = 0
+        $('.workList__item').each(function () {
+            -function (el) {
+                setTimeout(function () {
+                    var img=$(el).find('img')
+                    img.attr("src",img.attr("data-original"))
+                }, time += 200)
+            }(this)
+        })
+    })
 
+
+    function initPage() {
+        var width = ($(".workList__list").width() - 140) / 3
+        var height = width / 3 * 2, bigHeight = width * 1.5
+        $('.workList__item').width(width).height(height)
+        $('.workList__item[size=big]').height(bigHeight)
+    }
+    function loadImg(e) {
+        $(e.target).parents(".workList__item").addClass("is-visible")
+        $(e.target).parents("li").addClass("done").find(".workList__img__wrap").css("backgroundImage", 'url(' + e.target.src + ')')
+    }
+</script>
 </body>
 </html>

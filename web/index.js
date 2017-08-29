@@ -5,9 +5,10 @@ let render = require('koa-ejs')
 let path = require('path')
 let static = require('koa-static')
 let menu = require('./app/controllers/menu')
+const adminPower = require('./app/controllers/adminPower')
 const koaBody = require('koa-body')
 const queryString = require('./app/utils/queryString')
-const session = require('koa-session')
+const session = require('koa-generic-session')
 
 render(app, {
     root: path.join(__dirname, 'view'),
@@ -22,19 +23,20 @@ app.use(queryString)
 app.keys = ['some secret hurr'];
 
 app.use(session({
-    key: 'koa:sess',
-    maxAge: 86400000,
-    overwrite: true,
+    key: 'jmAdminSid',
+    maxAge: (1000 * 60 * 20),//20分钟session超时
+    overwrite: false,
     httpOnly: true,
-    signed: true,
-    rolling: false
+    rewrite: true,
+    signed: true
 }, app));
+
 
 app.use(async(ctx, next)=> {
     if (!ctx.session.language) {
         ctx.session.language = 'cn'
     }
-    let oldPath = ctx.request.header.referer||'/'
+    let oldPath = ctx.request.header.referer || '/'
     if (ctx.request.url == "/cn") {
         ctx.session.language = 'cn'
         ctx.redirect(oldPath)
@@ -47,7 +49,12 @@ app.use(async(ctx, next)=> {
 
 })
 
+
+//后台权限检查
+app.use(adminPower)
+
 app.use(menu)
+
 
 app.use(async(ctx, next)=> {
     try {
@@ -63,6 +70,5 @@ app.use(async(ctx, next)=> {
 })
 
 app.use(router.routes(), router.allowedMethods())
-
 
 app.listen(9999);

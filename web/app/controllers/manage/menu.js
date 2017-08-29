@@ -21,9 +21,9 @@ exports.edit = async(ctx, next)=> {
 
 exports.getTreeMenu = async(ctx, next)=> {
     var where = {};
-   /* if (!ctx.session.admin.superAdmin) {
+    if (!ctx.session.admin.superAdmin) {
         where._id = {$in: ctx.session.admin.power};
-    }*/
+    }
     let data =await db.Menu.find(where).sort({'parantId':1,'index':1});
     if (data instanceof Error) {
         ctx.body = {"status": 10, 'message': data}

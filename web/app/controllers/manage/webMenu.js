@@ -30,13 +30,3 @@ module.exports.edit = async(ctx, next)=> {
     }
 
 }
-/*
-
-async function a() {
-    return new Promise((rev,rej)=>{
-         setTimeout(()=>{
-             console.info("time")
-             rev()
-         },2000)
-     })
-}*/

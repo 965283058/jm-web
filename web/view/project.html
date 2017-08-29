@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <%menus.forEach(function(menu){%>
+    <%if(menu.router==router){%>
+    <title><%=menu.text%></title>
+    <%}%>
+    <%})%>
+    <link rel="stylesheet" href="../static/css/swiper.min.css">
+    <script src="../static/js/jquery-1.10.1.min.js"></script>
+    <script src="../static/js/swiper.min.js"></script>
+    <style>
+        @-webkit-keyframes fadeInDown {
+            0% {
+                opacity: 0;
+                -webkit-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0)
+            }
+
+            100% {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none
+            }
+        }
+
+        @keyframes fadeInDown {
+            0% {
+                opacity: 0;
+                -webkit-transform: translate3d(0, -100%, 0);
+                -ms-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0)
+            }
+
+            100% {
+                opacity: 1;
+                -webkit-transform: none;
+                -ms-transform: none;
+                transform: none
+            }
+        }
+
+        @-webkit-keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0)
+            }
+            100% {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                -webkit-transform: translate3d(0, 100%, 0);
+                -ms-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0)
+            }
+            100% {
+                opacity: 1;
+                -webkit-transform: none;
+                -ms-transform: none;
+                transform: none
+            }
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            font: 12px/1.5 "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        .bg {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-image: url("../static/img/4.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            filter: blur(20px);
+            z-index: 1;
+        }
+
+        .warp {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            background: rgba(255, 255, 255, 0);
+            position: absolute;
+            z-index: 10;
+        }
+
+        .project__list {
+            padding-top: 150px;
+            visibility: hidden;
+        }
+
+        .project__item {
+            width: 100%;
+            color: #ffffff;
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .item__text {
+            width: 120px;
+            text-align: right;
+            float: left;
+        }
+
+        .item__text--name {
+            font-size: 16px;
+            font-family: Verdana, Arial, sans-serif;
+        }
+
+        .item__text--time {
+            font-size: 14px;
+        }
+
+        .swiper-container {
+        }
+
+        .swiper-wrapper {
+        }
+
+        .project__list .swiper-slide {
+            overflow: hidden;
+        }
+
+        .project__list .swiper-wrapper img,
+        .project__list .swiper-wrapper video {
+            min-width: 100%;
+            height: 100%;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        .video__play {
+            width: 20%;
+            height: 30%;
+            display: block;
+            position: absolute;
+            left: 40%;
+            top: 40%;
+            background: url("../static/img/logo_play.png") no-repeat;
+            background-size: 100%;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .project__list .files {
+            position: absolute;
+            left: 130px;
+            right: 40px;
+            padding: 0 30px;
+        }
+
+        .project__list .swiper-button {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            background-size: cover;
+            position: absolute;
+            top: 50%;
+            margin-top: -10px;
+        }
+
+        .project__list .swiper-button-prev {
+            background-image: url("../static/img/left_s.png");
+            left: 0px;
+        }
+
+        .project__list .swiper-button-next {
+            background-image: url("../static/img/right_s.png");
+            right: 0px;
+        }
+
+        .perview {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            display: none;
+        }
+
+        .perview .swiper-container {
+            width: 70%;
+            height: 70%;
+            position: absolute;
+            top: 15%;
+            left: 15%;
+        }
+
+        .perview .swiper-slide {
+            width: 100%;
+            text-align: center;
+        }
+
+        .perview img,
+        .perview video {
+            width: 100%;
+            height: 100%;
+        }
+
+        .perview .video__play {
+            width: 100px;
+            height: 110px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .perview .swiper-button-prev {
+            width: 40px;
+            height: 70px;
+            background-image: url("../static/img/left.png");
+            background-size: 100%;
+            left: 5%;
+
+        }
+
+        .perview .swiper-button-next {
+            width: 40px;
+            height: 70px;
+            background-image: url("../static/img/right.png");
+            background-size: 100%;
+            right: 5%;
+
+        }
+
+        .perview__btn-warp {
+            position: absolute;
+            left: 15%;
+            bottom: 50px;
+            height: 50px;
+            width: 100%;
+            z-index: 10;
+            color: #ffffff;
+        }
+
+        .perview__btn-warp span {
+            padding: 5px 10px;
+
+        }
+
+        .perview__btn-warp--more {
+            margin-left: 30px;
+            cursor: pointer;
+        }
+
+        .project__info {
+            width: 50%;
+            height: 30%;
+            background: rgba(0, 0, 0, 0.85);
+            position: absolute;
+            z-index: 10;
+            bottom: 0;
+            transform: translateY(100%);
+            transition: 0.5s;
+            color: #ffffff;
+        }
+
+        .project__info--active {
+            transform: translateY(0);
+        }
+
+        .project__info--top {
+            height: 20px;
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            right: 10px;
+            text-align: left;
+        }
+
+        .project__info--close {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            right: 0;
+            background: url("../static/img/close_big.png") no-repeat;
+            background-size: 20px 20px;
+            background-position: center right;
+        }
+
+        .project__info--text {
+            position: absolute;
+            left: 10px;
+            right: 10px;
+            top: 40px;
+            bottom: 10px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 18px;
+            text-align: left;
+            padding-right: 5px;
+        }
+
+        .project__info--name {
+            padding: 0px 20px;
+        }
+
+        .project__info--time {
+
+
+        }
+
+        .project__info--index {
+            display: inline-block;
+            float: right;
+            margin-right: 120px;
+        }
+
+        .project__info--text::-webkit-scrollbar {
+            width: 5px;
+            height: 50px;
+
+        }
+
+        .project__info--text::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+            border-radius: 10px;
+            background-color: #6c6c6c;
+            border-radius: 10px;
+        }
+
+        .project__info--text::-webkit-scrollbar-thumb {
+            background-color: #ffffff;
+            width: 5px;
+            border-radius: 10px;
+        }
+
+
+    </style>
+</head>
+<body>
+<% include menu.html %>
+<div class="bg"></div>
+<div class="warp">
+    <div class="project__list">
+        <% list.forEach(function(item){ %>
+        <div class="project__item" id="<%=item.id%>">
+            <div class="item__text">
+                <span class="item__text--name"><%=item.name%></span>
+                <span class="item__text--time"><%=new Date(item.time).getFullYear()%></span>
+            </div>
+            <div class="files">
+                <div class="swiper-button swiper-button-prev"></div>
+                <div class="swiper-button swiper-button-next"></div>
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <% item.files.forEach(function(file){ %>
+                        <div class="swiper-slide" data-content="<%=file.content%>">
+                            <% if(file.url.split('.').pop()=="mp4"){ %>
+                            <video class="video" src="<%=file.url%>" type="video/mp4">
+                                你的浏览器不支持播放视频
+                            </video>
+                            <div class="video__play"></div>
+                            <% }else{ %>
+                            <img data-src="<%=file.url%>" class="swiper-lazy" alt="">
+                            <% } %>
+                        </div>
+                        <% })%>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <% })%>
+    </div>
+</div>
+<div class="perview">
+    <div class="swiper-container">
+        <div class="swiper-wrapper"></div>
+    </div>
+    <div class="perview__btn-warp">
+        <span class="perview__btn-warp--name"></span>
+        <span class="perview__btn-warp--time"></span>
+        <span class="perview__btn-warp--more">Read more</span>
+    </div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+</div>
+
+
+<script>
+    function querySring(item) {
+        var svalue = location.search.match(new RegExp("[\?\&]" + item + "=([^\&]*)(\&?)", "i"));
+        return svalue ? svalue[1] : svalue;
+    }
+
+    var h = $(".files:eq(0)").width() * 0.12;
+    $(".project__item").height(h)
+    $(".files .swiper-slide").height(h)
+
+    $(".files").each(function () {
+        var container = $(this).find(".swiper-container")[0]
+        new Swiper(container, {
+            pagination: '.swiper-pagination',
+            paginationClickable: true,
+            slidesPerView: 6,
+            spaceBetween: 5,
+            lazyLoading: true,
+            prevButton: $(this).find(".swiper-button-prev")[0],
+            nextButton: $(this).find(".swiper-button-next")[0],
+        });
+    })
+
+    $(".project__list").css("visibility", "visible")
+
+    $(".perview").click(function (e) {
+        if (e.target.tagName != "IMG" && e.target.tagName != "VIDEO" && e.target.className.indexOf('swiper-button-') != 0 && e.target.className.indexOf('video__play') != 0) {
+            $(this).hide()
+            $('.project__list').show()
+            document.body.scrollTop = window.st || 0
+        }
+        return false
+    })
+
+    $(".project__list .swiper-slide").click(function () {
+        window.st = document.body.scrollTop
+        $(".project__list").hide()
+        var self = this;
+        setTimeout(function () {
+            $(".perview").show()
+            $(".perview__btn-warp").show()
+            if (!window.swiper) {
+                window.swiper = new Swiper('.perview .swiper-container', {
+                    height: 500,
+                    loop: true,
+                    nextButton: '.perview .swiper-button-next',
+                    prevButton: '.perview .swiper-button-prev',
+                    onSlideChangeStart: function (swiper) {
+                        var index = swiper.activeIndex
+                        if (index == 0) {
+                            index = $(".perview").find(".swiper-slide").length - 1
+                        } else {
+                            index = index - 1
+                        }
+                        var video = $(".perview .swiper-slide:eq(" + index + ")").find("video")
+                        if (video.length) {
+                            video[0].pause()
+                        }
+                        if ($(".perview .swiper-slide-active").find(".project__info--active").length) {
+                            $(".perview__btn-warp").hide()
+                        } else {
+                            $(".perview__btn-warp").show()
+                        }
+                    }
+                });
+            } else {
+                window.swiper.removeAllSlides()
+            }
+
+            var slideList = $(self).parent().find(".swiper-slide")
+            var name = $(self).parents('.project__item').find(".item__text--name").html()
+            var time = $(self).parents('.project__item').find(".item__text--time").html()
+
+            $(".perview__btn-warp--name").html(name)
+            $(".perview__btn-warp--time").html(time)
+
+            slideList.each(function (index) {
+                var img = $(this).find("img")
+                var html = ''
+                if (img.length) {
+                    html = '<img src="' + (img.attr("src") || img.attr("data-src")) + '">'
+                } else {
+                    var src = $(this).find("video").attr("src")
+                    html = '<video src="' + src + '" type="video/mp4"> </video><div class="video__play"></div>'
+                }
+                var content = this.dataset.content
+                var close = '<div class="project__info--top"><span class="project__info--name">' + name + '</span><span class="project__info--time">' + time + '</span><span class="project__info--index">' + (index + 1) + '/' + slideList.length + '</span><span class="project__info--close"></span></div>'
+                html = '<div class="swiper-slide"><div class="project__info">' + close + '<div class="project__info--text">' + content + '</div></div>' + html + '</div>'
+
+                window.swiper.appendSlide(html)
+            })
+            var oldSrc = $(self).find("img,video").attr("src")
+            var selectIndex = 0;
+            $(".perview .swiper-slide").each(function (i) {
+                var img = $(this).find("img")
+                if (img.length == 1 && img.attr('src') == oldSrc) {
+                    selectIndex = i
+                    return false
+                }
+                if (img.length == 0 && $(this).find("video").attr("src") == oldSrc) {
+                    selectIndex = i
+                    return false
+                }
+            })
+            window.swiper.slideTo(selectIndex, 0, false)
+
+            $(".perview .video__play").click(function () {
+                $(this).hide()
+                var video = $(this).prev("video")
+                video.prop("controls", true)[0].play()
+                video[0].onpause = function () {
+                    $(this).prop("controls", false)
+                    $(this).next().show()
+                }
+                video[0].onplay = function () {
+                    $(this).prop("controls", true)
+                    $(this).next().hide()
+                }
+                video[0].onclick = function () {
+                    $(this).next().hide()
+                }
+            })
+
+            $(".project__info--close").click(function () {
+                $(".project__info").removeClass("project__info--active")
+                $(".perview__btn-warp").show()
+                return false
+            })
+            $(".project__info").click(function () {
+                return false
+            })
+            $(".perview__btn-warp").click(function () {
+                return false
+            })
+            $(".perview__btn-warp--more").click(function () {
+                $(".perview .swiper-slide-active").find(".project__info").addClass("project__info--active")
+                $(this).parents(".perview__btn-warp").hide()
+                return false
+            })
+        }, 200)
+    })
+
+    var id = querySring("id")
+    if (id) {
+        console.toLocaleString($("#" + id))
+        $("#" + id).find(".swiper-slide:eq(0)").click()
+    }
+
+</script>
+</body>
+</html>

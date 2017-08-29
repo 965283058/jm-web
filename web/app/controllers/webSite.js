@@ -2,24 +2,13 @@ var db = require("../db/Schema");
 
 module.exports.home = async(ctx, next)=> {
     let banner = await db.HomeBanner.find({status: 1}, 'img').sort({index: 1})
-    let setting=await db.WebSetting.findOne({key: 'homeBanner'}, 'value')
-    await ctx.render('index', {bannerList: banner, router: ctx.request.url, menus: ctx.menus,setting:setting.value})
+    let setting = await db.WebSetting.findOne({key: 'homeBanner'}, 'value')
+    await ctx.render('index', {bannerList: banner, router: ctx.request.url, menus: ctx.menus, setting: setting.value})
 }
 
-module.exports.list = async(ctx, next)=> {
-    let list = []
-    for (let i = 11411; i < 11611; i++) {
-        list.push({
-            id: i,
-            content: "子模板嵌套除了可以引入在数据中指定的子模板外，也可以通过指定字符串`#id`使用写在`script`标签中的模板代码.",
-            img: "http://art.team-lab.cn/images/sp-s/" + i
-        })
-    }
-    await ctx.render('list', {list: list, router: ctx.request.url, menus: ctx.menus})
-}
 
 module.exports.teamminus = async(ctx, next)=> {
-    let data= await db.WebSetting.findOne({key: 'teamminus'},'value.'+ctx.session.language)
+    let data = await db.WebSetting.findOne({key: 'teamminus'}, 'value.' + ctx.session.language)
     await ctx.render('teamminus', {
         menus: ctx.menus,
         router: ctx.request.url,
@@ -45,12 +34,12 @@ module.exports.people = async(ctx, next)=> {
 }
 
 module.exports.joinUs = async(ctx, next)=> {
-    let data=await db.JoinUs.find({status:1},ctx.session.language).sort({index:1})
-    let list=[]
-    data.forEach(item=>{
+    let data = await db.JoinUs.find({status: 1}, ctx.session.language).sort({index: 1})
+    let list = []
+    data.forEach(item=> {
         list.push({
-            title:item[ctx.session.language].title,
-            children:item[ctx.session.language].children
+            title: item[ctx.session.language].title,
+            children: item[ctx.session.language].children
         })
     })
     await ctx.render('joinUs', {
@@ -59,8 +48,8 @@ module.exports.joinUs = async(ctx, next)=> {
 }
 
 module.exports.contact = async(ctx, next)=> {
-    let result=await db.WebSetting.findOne({"key":'contact'})
-    if(!(result instanceof Error)){
+    let result = await db.WebSetting.findOne({"key": 'contact'})
+    if (!(result instanceof Error)) {
         await ctx.render('contact', {
             data: {
                 address: result.value[ctx.session.language].address,
@@ -74,4 +63,80 @@ module.exports.contact = async(ctx, next)=> {
         })
     }
 }
+
+module.exports.list = async(ctx, next)=> {
+    let result = await db.Project.find().sort({"time": 1})
+    if (!(result instanceof Error)) {
+        let list = []
+        for (let item of result) {
+            let temp = []
+            let imgUrl = ''
+            let imgContent
+
+            for(let file of item.files){
+                if (file.url.split('.').pop().toLowerCase() != "mp4") {
+                    imgUrl = file.url
+                    imgContent = file[ctx.session.language]
+                    break
+                }
+            }
+            list.push({
+                id: item._id,
+                name: item.name[ctx.session.language],
+                content: imgContent,
+                img: imgUrl
+            })
+        }
+
+        await ctx.render('list', {list: list, router: ctx.request.url, menus: ctx.menus})
+    }
+
+}
+
+module.exports.project = async(ctx, next)=> {
+    await queryProject(ctx, next)
+}
+module.exports.projectByType = async(ctx, next)=> {
+    let type = ctx.params.id
+    type = /^[0-9]+$/.test(type) ? type : null
+    await queryProject(ctx, next, type)
+}
+
+let queryProject = async(ctx, next, type)=> {
+    let where = {}
+    if (type) {
+        where.type = type
+    }
+    let result = await db.Project.find(where).sort({"time": 1})
+    if (!(result instanceof Error)) {
+        let list = []
+        for (let item of result) {
+            let temp = []
+            item.files.forEach(file=> {
+                temp.push({
+                    url: ctx.serverOrigin + file.url,
+                    content: file[ctx.session.language]
+                })
+            })
+            list.push({
+                id:item._id,
+                name: item.name[ctx.session.language],
+                time: item.time,
+                type: item.type,
+                files: temp
+            })
+        }
+        await ctx.render('project', {
+            list: list,
+            router: '/project',
+            menus: ctx.menus
+        })
+
+    }
+}
+
+
+
+
+
 

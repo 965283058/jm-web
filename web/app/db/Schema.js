@@ -79,8 +79,8 @@ var AdminSchema = new Schema({
     superAdmin: Number, // 0普通管理员 1超级管理员
     power: [String],
     status: Number, //-1 删除 0禁用 1正常
-    pwdStatus:{type: Number, default: 0},//0 新密码，未重置 1正常
-    creator: {type: Schema.Types.ObjectId, ref: 'Admin',default: null},
+    pwdStatus: {type: Number, default: 0},//0 新密码，未重置 1正常
+    creator: {type: Schema.Types.ObjectId, ref: 'Admin', default: null},
     createTime: {type: Number, default: Date.now()},
     lastLoginTime: Number
 });
@@ -90,8 +90,32 @@ exports.Admin = db.model('Admin', AdminSchema);
 var MenuSchema = new Schema({
     text: String,
     code: String,
-    iconCls: String,
+    icon: String,
     parentId: String,
     index: Number
 });
 exports.Menu = db.model('Menu', MenuSchema);
+
+
+var VideoSchema = new Schema({
+    text: String,
+    url: String
+});
+exports.Video = db.model('Video', VideoSchema);
+
+
+//项目
+var ProjectSchema = new Schema({
+    name: {
+        cn: String,
+        en: String
+    },
+    files: [{
+        url: String,
+        cn: String,
+        en: String
+    }],
+    time: {type: Number, default: Date.now()},
+    type: Number
+});
+exports.Project = db.model('Project', ProjectSchema);
