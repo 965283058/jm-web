@@ -24,7 +24,7 @@ app.keys = ['some secret hurr'];
 
 app.use(session({
     key: 'jmAdminSid',
-    maxAge: (1000 * 60 * 20),//20分钟session超时
+    maxAge: (1000 * 60 * 60*2),//20分钟session超时
     overwrite: false,
     httpOnly: true,
     rewrite: true,
