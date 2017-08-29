@@ -65,7 +65,7 @@ app.use(async(ctx, next)=> {
 })
 
 app.use(async(ctx, next)=> {
-    ctx.serverOrigin = 'http://127.0.0.1:9999'
+    ctx.serverOrigin = 'http://47.93.29.253'
     await next()
 })
 
