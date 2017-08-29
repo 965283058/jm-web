@@ -1,8 +1,8 @@
 */node_modules
 */npm-debug.log
+*/package-lock.json
+*/static/upload
 */.idea
 */bin
-*/package-lock.json
 .idea
 bin
-*/static/upload
