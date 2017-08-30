@@ -7,68 +7,10 @@
     <title><%=menu.text%></title>
     <%}%>
     <%})%>
-    <link rel="stylesheet" href="../static/css/idangerous.swiper.css">
+    <link rel="stylesheet" href="../static/css/swiper.min.css">
     <script src="../static/js/jquery-1.10.1.min.js"></script>
-    <script src="../static/js/idangerous.swiper.min.js"></script>
+    <script src="../static/js/swiper.min.js"></script>
     <style>
-        @-webkit-keyframes fadeInDown {
-            0% {
-                opacity: 0;
-                -webkit-transform: translate3d(0, -100%, 0);
-                transform: translate3d(0, -100%, 0)
-            }
-
-            100% {
-                opacity: 1;
-                -webkit-transform: none;
-                transform: none
-            }
-        }
-
-        @keyframes fadeInDown {
-            0% {
-                opacity: 0;
-                -webkit-transform: translate3d(0, -100%, 0);
-                -ms-transform: translate3d(0, -100%, 0);
-                transform: translate3d(0, -100%, 0)
-            }
-
-            100% {
-                opacity: 1;
-                -webkit-transform: none;
-                -ms-transform: none;
-                transform: none
-            }
-        }
-
-        @-webkit-keyframes fadeInUp {
-            0% {
-                opacity: 0;
-                -webkit-transform: translate3d(0, 100%, 0);
-                transform: translate3d(0, 100%, 0)
-            }
-            100% {
-                opacity: 1;
-                -webkit-transform: none;
-                transform: none
-            }
-        }
-
-        @keyframes fadeInUp {
-            0% {
-                opacity: 0;
-                -webkit-transform: translate3d(0, 100%, 0);
-                -ms-transform: translate3d(0, 100%, 0);
-                transform: translate3d(0, 100%, 0)
-            }
-            100% {
-                opacity: 1;
-                -webkit-transform: none;
-                -ms-transform: none;
-                transform: none
-            }
-        }
-
         * {
             padding: 0;
             margin: 0;
@@ -118,7 +60,7 @@
             text-align: center;
         }
 
-        .swiper-pagination-switch {
+        .swiper-pagination-bullet {
             width: 11px;
             height: 11px;
             background: #fff;
@@ -126,12 +68,13 @@
             display: block;
             margin: 7px 7px 13px;
             cursor: pointer;
+            opacity: 1;
         }
-        .pagination--h>.swiper-pagination-switch{
+        .pagination--h>.swiper-pagination-bullet{
             display: inline-block;
         }
 
-        .swiper-active-switch {
+        .swiper-pagination-bullet-active {
             background: rgb(255, 64, 138);
         }
 
@@ -160,35 +103,20 @@
 </div>
 <div class="pagination <%=setting.mode=='horizontal'?'pagination--h':'pagination--v'%>"></div>
 <script>
-    window.onload = function () {
-        var mySwiper = new Swiper('.swiper-container', {
-            speed: '<%=setting.speed%>',
-            autoplay: '<%=setting.autoplay%>',
-            autoplayDisableOnInteraction:<%-(setting.autoplayDisableOnInteraction=="true")%>,
-            mode: '<%=setting.mode%>',
+    var mySwiper = new Swiper('.swiper-container', {
+            direction: '<%=setting.mode%>',
+            speed: <%=setting.speed%>,
+            autoplay: <%=setting.autoplay%>,
+            autoplayDisableOnInteraction:<%=setting.autoplayDisableOnInteraction%>,
             resistance: '100%',
-            loop: <%-setting.loop=="true"%>,
+            loop: <%=setting.loop%>,
             mousewheelControl: true,
             mousewheelControlForceToAxis: true,
             grabCursor: true,
-            pagination: '.pagination',
+            pagination : '.pagination',
             paginationClickable: true,
-            keyboardControl: <%-(setting.keyboardControl=="true")%>
-        })
-
-        if('<%=setting.mode%>'=='horizontal'){
-            document.getElementsByTagName('body')[0].onwheel=function (e) {
-                if(e.deltaY>0){
-                    mySwiper.swipeNext()
-                }else{
-                    mySwiper.swipePrev()
-                }
-            }
-        }
-
-    }
-
-
+            keyboardControl: <%=setting.keyboardControl%>
+    })
 </script>
 </body>
 </html>

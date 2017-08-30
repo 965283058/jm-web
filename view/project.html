@@ -11,64 +11,6 @@
     <script src="../static/js/jquery-1.10.1.min.js"></script>
     <script src="../static/js/swiper.min.js"></script>
     <style>
-        @-webkit-keyframes fadeInDown {
-            0% {
-                opacity: 0;
-                -webkit-transform: translate3d(0, -100%, 0);
-                transform: translate3d(0, -100%, 0)
-            }
-
-            100% {
-                opacity: 1;
-                -webkit-transform: none;
-                transform: none
-            }
-        }
-
-        @keyframes fadeInDown {
-            0% {
-                opacity: 0;
-                -webkit-transform: translate3d(0, -100%, 0);
-                -ms-transform: translate3d(0, -100%, 0);
-                transform: translate3d(0, -100%, 0)
-            }
-
-            100% {
-                opacity: 1;
-                -webkit-transform: none;
-                -ms-transform: none;
-                transform: none
-            }
-        }
-
-        @-webkit-keyframes fadeInUp {
-            0% {
-                opacity: 0;
-                -webkit-transform: translate3d(0, 100%, 0);
-                transform: translate3d(0, 100%, 0)
-            }
-            100% {
-                opacity: 1;
-                -webkit-transform: none;
-                transform: none
-            }
-        }
-
-        @keyframes fadeInUp {
-            0% {
-                opacity: 0;
-                -webkit-transform: translate3d(0, 100%, 0);
-                -ms-transform: translate3d(0, 100%, 0);
-                transform: translate3d(0, 100%, 0)
-            }
-            100% {
-                opacity: 1;
-                -webkit-transform: none;
-                -ms-transform: none;
-                transform: none
-            }
-        }
-
         * {
             padding: 0;
             margin: 0;
@@ -123,12 +65,11 @@
         }
 
         .item__text--name {
-            font-size: 16px;
-            font-family: Verdana, Arial, sans-serif;
+            font-size: 14px; 
         }
 
         .item__text--time {
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .swiper-container {
@@ -316,7 +257,6 @@
 
         .project__info--time {
 
-
         }
 
         .project__info--index {
@@ -359,8 +299,10 @@
                 <span class="item__text--time"><%=new Date(item.time).getFullYear()%></span>
             </div>
             <div class="files">
+               <%if(item.files&&item.files.length>6){%>
                 <div class="swiper-button swiper-button-prev"></div>
                 <div class="swiper-button swiper-button-next"></div>
+                <%}%>
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
                         <% item.files.forEach(function(file){ %>
@@ -410,13 +352,12 @@
     $(".files").each(function () {
         var container = $(this).find(".swiper-container")[0]
         new Swiper(container, {
-            pagination: '.swiper-pagination',
             paginationClickable: true,
             slidesPerView: 6,
             spaceBetween: 5,
             lazyLoading: true,
-            prevButton: $(this).find(".swiper-button-prev")[0],
-            nextButton: $(this).find(".swiper-button-next")[0],
+            prevButton: $(this).find(".swiper-button-prev"),
+            nextButton: $(this).find(".swiper-button-next")
         });
     })
 
@@ -541,7 +482,6 @@
 
     var id = querySring("id")
     if (id) {
-        console.toLocaleString($("#" + id))
         $("#" + id).find(".swiper-slide:eq(0)").click()
     }
 
