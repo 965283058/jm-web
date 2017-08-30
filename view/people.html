@@ -26,7 +26,9 @@
             background-image: url("../static/img/4.jpg");
             background-size: cover;
             background-repeat: no-repeat;
+            -ms-filter: blur(20px);
             filter: blur(20px);
+            filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=20, MakeShadow=false);
             z-index: 1;
         }
         .warp{
@@ -95,28 +97,31 @@
         .people__info{
             background: rgba(255, 64, 138,0.75);
             position: fixed;
-            width: 590px;
+            width: 40%;
             z-index: 1000;
             top:0;
             bottom: 0;
-            right: -590px;
+            right: 0;
             overflow-y: scroll;
+            -ms-transform: translateX(100%);
+            transform: translateX(100%);
+            transition: 0.5s;
+        }
+        .people__info.show{
+            -ms-transform: translateX(100%);
+            transform: translateX(0);
         }
         .people__info--close{
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             background: url("../static/img/close_big.png");
             background-size: 100%;
             position: absolute;
             top: 20px;
-            left: 40px;
+            left: 30px;
             z-index: 10;
             cursor: pointer;
-
         }
-
-
-
 
         .people__info--img{
             width: 200px;
@@ -131,12 +136,13 @@
 
 
         .people__info--text{
-            width: 390px;
+            width: 100%;
             color: #ffffff;
-            margin:0 90px;
+            padding: 0 40px;
             float: right;
             text-align: right;
             display: block;
+            box-sizing: border-box;
         }
         .people__info--text.bold{
             font-size: 20px;
@@ -166,14 +172,16 @@
                 $("#name").html(this.dataset.longname)
                 $("#title").html(this.dataset.title)
                 $("#content").html(decodeURI(this.dataset.content))
-                $(".people__info").animate({
-                    right:0
-                },300)
+                $(".people__info").addClass("show")
             })
             $(".people__info--close").click(function () {
-                $(".people__info").animate({
-                    right:'-590px'
-                },300)
+                $(".people__info").removeClass("show")
+            })
+
+            $(".warp").click(function (e) {
+                if(e.target.className=='warp'){
+                    $(".people__info").removeClass("show")
+                }
             })
         })
 

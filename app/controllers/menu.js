@@ -10,7 +10,7 @@ module.exports = async(ctx, next)=> {
         }
         if (m.router == '/project') {
             if (ctx.session.language == 'cn') {
-                m.children = [{text: '小型', type: 1}, {text: '中型', type: 2}, {text: '大型', type: 3}]
+                m.children = [{text: '小', type: 1}, {text: '中', type: 2}, {text: '大', type: 3}]
             } else {
                 m.children = [{text: 'SMALL', type: 1}, {text: 'MEDIUM', type: 2}, {text: 'LARGE', type: 3}]
             }
