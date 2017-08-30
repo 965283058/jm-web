@@ -96,7 +96,7 @@ var MenuSchema = new Schema({
 });
 exports.Menu = db.model('Menu', MenuSchema);
 
-
+//视频管理
 var VideoSchema = new Schema({
     text: String,
     url: String

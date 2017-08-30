@@ -136,6 +136,13 @@ let queryProject = async(ctx, next, type)=> {
 }
 
 
+module.exports.video = async(ctx, next)=> {
+    let id = ctx.params.id
+    let data = await db.Video.findOne({'_id':id})
+    await ctx.render('video', {text:data.text,url:data.url})
+}
+
+
 
 
 

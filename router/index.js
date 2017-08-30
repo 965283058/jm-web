@@ -21,6 +21,8 @@ router.get('/join_us',webSite.joinUs)
 
 router.get('/contact',webSite.contact)
 
+router.get('/video/:id',webSite.video)
+
 router.get('/',webSite.home)
 
 

@@ -1,8 +1,9 @@
 <style>
-    html,body{
+    html, body {
         padding: 0;
         margin: 0;
     }
+
     .nav {
         width: 100%;
         position: fixed;
@@ -23,6 +24,7 @@
         top: 0px;;
         left: 60px;
     }
+
     .nav__menu-btn--transition {
         transition: 0.5s;
     }
@@ -36,11 +38,10 @@
         list-style: none;
         padding: 0;
         position: absolute;
-        top:10px;
+        top: 10px;
         left: 110px;
         margin: 0;
     }
-
 
     .nav--active .nav__menu {
         display: inline-block;
@@ -49,12 +50,14 @@
 
     .nav__menu--item {
         width: auto;
+        height: auto;
         display: inline-block;
         color: #FFF;
         font-weight: bold;
         font-size: 14px;
         line-height: 20px;
         padding: 0 15px;
+        float: left;
         position: relative;
     }
 
@@ -67,29 +70,29 @@
         color: rgb(255, 64, 138);
     }
 
-    .nav__child-menu{
+    .nav__child-menu {
+        width: 210px;
         position: absolute;
-        left: 50%;
-        bottom: -30px;
         list-style: none;
-        display: block;
         transform: translateX(-50%);
+        bottom: -30px;
+        left: 50%;
         padding: 0;
         display: none;
     }
 
-    .nav__child-menu .nav__menu--item{
-        width: 100px;
+    .nav__child-menu .nav__menu--item {
+        width: 70px;
         padding: 0;
         text-align: center;
         margin: 0;
     }
 
-    .nav__child-menu .nav__menu--item a{
+    .nav__child-menu .nav__menu--item a {
         color: #FFF;
     }
 
-    .nav__child-menu .nav__menu--item.active a{
+    .nav__child-menu .nav__menu--item.active a {
         color: rgb(255, 64, 138);
     }
 
@@ -130,29 +133,31 @@
     <span class="nav__menu-btn"></span>
     <ul class="nav__menu">
         <%menus.forEach(function(menu){%>
-             <%if(menu.router==router){%>
-                <li class="nav__menu--item active"><a href="javascript:void(0)"><%=menu.text%></a>
-                    <%if(menu.children&&menu.children.length){%>
-                    <ul class="nav__child-menu" style="width: <%=(menu.children.length*104)%>px">
-                        <%menu.children.forEach(function(child){%>
-                        <li class="nav__menu--item"><a href="<%=menu.router%>/<%=child.type%>"><%=child.text%></a></li>
-                        <%})%>
-                    </ul>
-                    <%}%>
-                </li>
-            <%}else{%>
-                <li class="nav__menu--item"><a href="<%=menu.router%>"><%=menu.text%></a>
-                    <%if(menu.children&&menu.children.length){%>
-                    <ul class="nav__child-menu" style="width: <%=(menu.children.length*104)%>px">
-                        <%menu.children.forEach(function(child){%>
-                        <li class="nav__menu--item"><a href="<%=menu.router%>/<%=child.type%>"><%=child.text%></a></li>
-                        <%})%>
-                    </ul>
-                    <%}%>
-                </li>
+        <%if(menu.router==router){%>
+        <li class="nav__menu--item active" <%=(menu.children&&menu.children.length)?'children':''%> ><a href="javascript:void(0)"><%=menu.text%></a>
+            <%if(menu.children&&menu.children.length){%>
+            <ul class="nav__child-menu" >
+                <%menu.children.forEach(function(child){%>
+                <li class="nav__menu--item"><a href="<%=menu.router%>/<%=child.type%>"><%=child.text%></a></li>
+                <%})%>
+            </ul>
             <%}%>
+        </li>
+        <%}else{%>
+        <li class="nav__menu--item" <%=(menu.children&&menu.children.length)?'children':''%> ><a href="<%=menu.router%>"><%=menu.text%></a>
+            <%if(menu.children&&menu.children.length){%>
+            <ul class="nav__child-menu" >
+                <%menu.children.forEach(function(child){%>
+                <li class="nav__menu--item"><a href="<%=menu.router%>/<%=child.type%>"><%=child.text%></a></li>
+                <%})%>
+            </ul>
+            <%}%>
+        </li>
+        <%}%>
         <%})%>
     </ul>
+
+
     <dl class="language">
         <dt class="language__logo">
             <img src="../static/img/language.png" alt="">
@@ -166,10 +171,10 @@
     $(function () {
         $(".nav__menu-btn").click(function () {
             $('.nav').toggleClass("nav--active")
-            if($('.nav').hasClass("nav--active")){
-                window.localStorage.setItem("showMenu",1)
-            }else{
-                window.localStorage.setItem("showMenu",0)
+            if ($('.nav').hasClass("nav--active")) {
+                window.localStorage.setItem("showMenu", 1)
+            } else {
+                window.localStorage.setItem("showMenu", 0)
             }
         })
         $(".language__logo img").click(function () {
@@ -177,29 +182,32 @@
             return false
         })
         $(document).click(function (e) {
-            if(e.target.className.indexOf("language")!=0){
+            if (e.target.className.indexOf("language") != 0) {
                 $('.language__item').hide()
             }
-            if(e.target.className.indexOf("nav__child-menu")!=0&&$(e.target).parents("ul.nav__child-menu").length==0){
+            if (e.target.className.indexOf("nav__child-menu") != 0 && $(e.target).parents("ul.nav__child-menu").length == 0) {
                 $("ul.nav__child-menu").hide()
             }
         })
 
 
-        if(window.localStorage.showMenu=="1"){
+        if (window.localStorage.showMenu == "1") {
             $('.nav').addClass("nav--active")
         }
         setTimeout(function () {
             $('.nav__menu-btn').addClass("nav__menu-btn--transition")
-        },100)
+        }, 100)
 
-        $(".nav__menu--item").hover(function () {
-            $(this).find("ul.nav__child-menu").show()
+        $(".nav__menu--item[children] a").hover(function () {
+            $(this).parents(".nav__menu--item").find("ul.nav__child-menu").show()
         })
-        if(window.location.href.indexOf("project/")>0){
-            var type=window.location.href.split("/").pop().replace("#",'')
+        $(".nav__menu--item[children]").mouseleave(function () {
+           // $(this).find("ul.nav__child-menu").hide()
+        })
+        if (window.location.href.indexOf("project/") > 0) {
+            var type = window.location.href.split("/").pop().replace("#", '')
             $("ul.nav__child-menu").show().find("li.nav__menu--item").each(function () {
-                if($(this).find("a").attr("href")=="/project/"+type){
+                if ($(this).find("a").attr("href") == "/project/" + type) {
                     $(this).addClass("active")
                     return false
                 }
