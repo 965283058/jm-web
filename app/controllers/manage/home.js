@@ -57,7 +57,6 @@ module.exports.edit = async(ctx, next)=> {
     } else {
         ctx.body = {"status": 10, "message": '图片文件移动错误：' + moveResult.message}
     }
-
 }
 
 const update = async(ctx, data) => {
@@ -65,6 +64,7 @@ const update = async(ctx, data) => {
         "index": data.index,
         'status': data.status
     }
+    await delHomeBanner(data.id)
     if (data.img) {
         updateData.img = data.img
     }
@@ -89,8 +89,7 @@ const add = async(ctx, data) => {
 
 module.exports.del = async(ctx, next)=> {
     let id = ctx.request.body.id;
-    let banner = await db.HomeBanner.findOne({_id: id})
-    await file.delete(process.cwd() + banner.img)
+    await delHomeBanner(id)
     let result = await db.HomeBanner.remove({"_id": id})
     if (!(result instanceof Error)) {
         ctx.body = {"status": 0, "message": '', "data": result}
@@ -105,4 +104,9 @@ function output(ctx, result) {
     } else {
         ctx.body = {"status": 10, "message": result}
     }
+}
+
+let delHomeBanner = async(id)=> {
+    let banner = await db.HomeBanner.findOne({'_id': id})
+    await file.delete(process.cwd() + banner.img)
 }
