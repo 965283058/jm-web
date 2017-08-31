@@ -9,14 +9,15 @@
     <%})%>
     <script src="../static/js/jquery-1.10.1.min.js"></script>
     <style>
-        html,body{
-            background-size:100% ;
+        html, body {
+            background-size: 100%;
             background-repeat: no-repeat;
             height: 100%;
             padding: 0;
             margin: 0;
-            font: 12px/1.5 "Microsoft YaHei","PingFang SC","Helvetica Neue",Helvetica,Arial,sans-serif;
+            font: 12px/1.5 "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
+
         .bg {
             position: absolute;
             top: 0;
@@ -31,22 +32,25 @@
             filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=20, MakeShadow=false);
             z-index: 1;
         }
-        .warp{
+
+        .warp {
             width: 100%;
             height: 100%;
             overflow: hidden;
             text-align: center;
-            background: rgba(255,255,255,0);
+            background: rgba(255, 255, 255, 0);
             position: absolute;
             z-index: 10;
 
         }
+
         .people__list {
             display: block;
             padding: 0;
             padding-left: 50px;
             padding-top: 150px;
         }
+
         .people__list:after {
             content: '';
             display: block;
@@ -54,21 +58,24 @@
             clear: both;
         }
 
-        .people__item{
+        .people__item {
             display: inline-block;
             float: left;
             margin: 20px;
         }
-        .people__item--name{
+
+        .people__item--name {
             color: #FFF;
             line-height: 24px;
             text-align: center;
             visibility: hidden;
         }
-        .people__item:hover .people__item--name{
+
+        .people__item:hover .people__item--name {
             visibility: visible;
         }
-        .people__item--img{
+
+        .people__item--img {
             border-radius: 50%;
             width: 140px;
             height: 140px;
@@ -79,6 +86,7 @@
             position: relative;
             cursor: pointer;
         }
+
         .people__item--img:after {
             content: '';
             display: block;
@@ -87,31 +95,46 @@
             left: 0px;
             right: 0px;
             bottom: 0px;
-            background-color:#ffffff;
+            background-color: #ffffff;
         }
-        .people__item--img:hover:after{
+
+        .people__item--img:hover:after {
             opacity: 0;
         }
 
-
-        .people__info{
-            background: rgba(255, 64, 138,0.75);
+        .people__info {
+            background: rgba(255, 64, 138, 0.75);
             position: fixed;
             width: 40%;
             z-index: 1000;
-            top:0;
+            top: 0;
             bottom: 0;
             right: 0;
             overflow-y: scroll;
+            -webkit-transform: translateX(100%);
             -ms-transform: translateX(100%);
+            -o-transform: translateX(100%);
+            -moz-transform: translateX(100%);
             transform: translateX(100%);
+
+            -webkit-transition: 0.5s;
+            -ms-transition: 0.5s;
+            -o-transition: 0.5s;
+            -moz-transition: 0.5s;
             transition: 0.5s;
+
         }
-        .people__info.show{
-            -ms-transform: translateX(100%);
+
+        .people__info.show {
+            -webkit-transform: translateX(0);
+            -ms-transform: translateX(0);
+            -o-transform: translateX(0);
+            -moz-transform: translateX(0);
             transform: translateX(0);
+
         }
-        .people__info--close{
+
+        .people__info--close {
             width: 30px;
             height: 30px;
             background: url("../static/img/close_big.png");
@@ -123,7 +146,7 @@
             cursor: pointer;
         }
 
-        .people__info--img{
+        .people__info--img {
             width: 200px;
             height: 200px;
             border-radius: 50%;
@@ -134,8 +157,7 @@
             cursor: pointer;
         }
 
-
-        .people__info--text{
+        .people__info--text {
             width: 100%;
             color: #ffffff;
             padding: 0 40px;
@@ -144,19 +166,22 @@
             display: block;
             box-sizing: border-box;
         }
-        .people__info--text.bold{
+
+        .people__info--text.bold {
             font-size: 20px;
             font-weight: bolder;
             line-height: 30px;
         }
-        .people__info--text.content{
+
+        .people__info--text.content {
             text-align: justify;
             font-size: 16px;
             line-height: 22px;
             margin-top: 20px;
             padding-bottom: 10px;
         }
-        .people__info--text::-webkit-scrollbar{
+
+        .people__info--text::-webkit-scrollbar {
             width: 0;
         }
 
@@ -164,11 +189,11 @@
     <script>
         $(function () {
             $(".people__item--img").hover(function () {
-                $(this).prev(".people__item--name").css("visibility","visible")
-            },function () {
-                $(this).prev(".people__item--name").css("visibility","hidden")
+                $(this).prev(".people__item--name").css("visibility", "visible")
+            }, function () {
+                $(this).prev(".people__item--name").css("visibility", "hidden")
             }).click(function () {
-                $(".people__info .people__info--img").css("background-image","url('"+decodeURI(this.dataset.img)+"')")
+                $(".people__info .people__info--img").css("background-image", "url('" + decodeURI(this.dataset.img) + "')")
                 $("#name").html(this.dataset.longname)
                 $("#title").html(this.dataset.title)
                 $("#content").html(decodeURI(this.dataset.content))
@@ -179,7 +204,7 @@
             })
 
             $(".warp").click(function (e) {
-                if(e.target.className=='warp'){
+                if (e.target.className == 'warp') {
                     $(".people__info").removeClass("show")
                 }
             })
@@ -196,7 +221,9 @@
         <% proples.forEach(function(prople){ %>
         <div class="people__item">
             <div class="people__item--name"><%=prople.name%></div>
-            <div class="people__item--img" data-name="<%-prople.name%>" data-longName="<%-prople.longName%>" data-title="<%-prople.title%>" data-img="<%-encodeURI(prople.img)%>" data-content="<%-encodeURI(prople.content)%>" style="background-image: url('<%=prople.img%>')">
+            <div class="people__item--img" data-name="<%-prople.name%>" data-longName="<%-prople.longName%>"
+                 data-title="<%-prople.title%>" data-img="<%-encodeURI(prople.img)%>"
+                 data-content="<%-encodeURI(prople.content)%>" style="background-image: url('<%=prople.img%>')">
             </div>
         </div>
         <% }); %>

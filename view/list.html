@@ -96,10 +96,16 @@
             top: 50%;
             -webkit-transform: translateY(-50%);
             -ms-transform: translateY(-50%);
+            -o-transform:translateY(-50%);
+            -moz-transform: translateY(-50%);
             transform: translateY(-50%);
         }
 
         .workList__item:hover .workList__img__wrap {
+            -webkit-transform: scale(1.05);
+            -ms-transform: scale(1.05);
+            -o-transform:scale(1.05);
+            -moz-transform: scale(1.05);
             transform: scale(1.05);
         }
 
@@ -135,21 +141,27 @@
 
         @keyframes loading {
             from {
-                transform: rotate(0deg);
-                -webkit-transform: rotate(0deg);
+                -webkit-transform:rotate(0deg);
                 -ms-transform: rotate(0deg);
+                -o-transform:rotate(0deg);
+                -moz-transform: rotate(0deg);
+                transform: rotate(0deg);
 
             }
             to {
-                transform: rotate(360deg);
-                -webkit-transform: rotate(360deg);
+                -webkit-transform:rotate(360deg);
                 -ms-transform: rotate(360deg);
+                -o-transform:rotate(360deg);
+                -moz-transform: rotate(360deg);
+                transform: rotate(360deg);
+
             }
         }
 
         .fadeIn {
             opacity: 0;
             -webkit-transition: opacity 1s cubic-bezier(0.215, 0.61, 0.355, 1), -webkit-transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+            -ms-transition: opacity 1s cubic-bezier(0.215, 0.61, 0.355, 1), -ms-transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
             transition: opacity 1s cubic-bezier(0.215, 0.61, 0.355, 1), transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
             transform: scale(1.05)
         }
@@ -157,6 +169,9 @@
         .fadeIn.is-visible {
             opacity: 1;
             -webkit-transform: scale(1);
+            -ms-transition: scale(1);
+            -o-transform:scale(1);
+            -moz-transform: scale(1);
             transform: scale(1);
         }
 

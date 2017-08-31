@@ -162,6 +162,11 @@
             height: 110px;
             left: 50%;
             top: 50%;
+
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
         }
 
@@ -210,12 +215,25 @@
             position: absolute;
             z-index: 10;
             bottom: 0;
+            -webkit-transform: translateY(100%);
+            -ms-transform: translateY(100%);
+            -o-transform: translateY(100%);
+            -moz-transform: translateY(100%);
             transform: translateY(100%);
+
+            -webkit-transition: 0.5s;
+            -ms-transition: 0.5s;
+            -o-transition: 0.5s;
+            -moz-transition: 0.5s;
             transition: 0.5s;
             color: #ffffff;
         }
 
         .project__info--active {
+            -webkit-transform: translateY(0);
+            -ms-transform: translateY(0);
+            -o-transform: translateY(0);
+            -moz-transform: translateY(0);
             transform: translateY(0);
         }
 
@@ -298,7 +316,7 @@
                 <span class="item__text--time"><%=new Date(item.time).getFullYear()%></span>
             </div>
             <div class="files">
-               <%if(item.files&&item.files.length>6){%>
+                <%if(item.files&&item.files.length>6){%>
                 <div class="swiper-button swiper-button-prev"></div>
                 <div class="swiper-button swiper-button-next"></div>
                 <%}%>
