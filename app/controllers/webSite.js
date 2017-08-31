@@ -72,7 +72,7 @@ module.exports.list = async(ctx, next)=> {
             let imgUrl = ''
             for(let file of item.files){
                 if (file.split('.').pop().toLowerCase() != "mp4") {
-                    imgUrl = file.url
+                    imgUrl = file
                     break
                 }
             }
@@ -83,7 +83,6 @@ module.exports.list = async(ctx, next)=> {
                 img: imgUrl
             })
         }
-
         await ctx.render('list', {list: list, router: ctx.request.url, menus: ctx.menus})
     }
 
