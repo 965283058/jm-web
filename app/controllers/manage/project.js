@@ -14,7 +14,7 @@ module.exports.list = async(ctx, next)=> {
         where['cn.name'] = new RegExp(name_cn)
     }
     if (name_en) {
-        where['en.'] = new RegExp(name_en)
+        where['en.name'] = new RegExp(name_en)
     }
     if (type) {
         where.type = {'$in': type}
