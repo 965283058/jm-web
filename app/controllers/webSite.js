@@ -65,25 +65,21 @@ module.exports.contact = async(ctx, next)=> {
 }
 
 module.exports.list = async(ctx, next)=> {
-    let result = await db.Project.find().sort({"time": 1})
+    let result = await db.Project.find().sort({"time": -1})
     if (!(result instanceof Error)) {
         let list = []
         for (let item of result) {
-            let temp = []
             let imgUrl = ''
-            let imgContent
-
             for(let file of item.files){
-                if (file.url.split('.').pop().toLowerCase() != "mp4") {
+                if (file.split('.').pop().toLowerCase() != "mp4") {
                     imgUrl = file.url
-                    imgContent = file[ctx.session.language]
                     break
                 }
             }
             list.push({
                 id: item._id,
-                name: item.name[ctx.session.language],
-                content: imgContent,
+                name: item[ctx.session.language].name,
+                content: item[ctx.session.language].content,
                 img: imgUrl
             })
         }
