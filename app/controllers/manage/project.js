@@ -8,24 +8,24 @@ module.exports.list = async(ctx, next)=> {
 
     let page = Number.parseInt(ctx.request.body.page) || 1
     let rows = Number.parseInt(ctx.request.body.rows) || 1
-    let type = ctx.request.body.type||[]
+    let type = ctx.request.body.type || []
     let where = {}
     if (name_cn) {
-        where['name.cn'] = new RegExp(name_cn)
+        where['cn.name'] = new RegExp(name_cn)
     }
     if (name_en) {
-        where['name.en'] = new RegExp(name_en)
+        where['en.'] = new RegExp(name_en)
     }
     if (type) {
         where.type = {'$in': type}
     }
 
     let total = await db.Project.count(where)
-    let list = await db.Project.find(where).sort({"time": 1}).limit(rows).skip((page - 1) * rows)
+    let list = await db.Project.find(where).sort({"time": -1}).limit(rows).skip((page - 1) * rows)
     if (list instanceof Array) {
         list.forEach((item)=> {
             item.files.forEach(file=> {
-                file.url = ctx.serverOrigin + file.url
+                file = ctx.serverOrigin + file
             })
         })
         ctx.body = {"status": 0, "message": "", data: {page: page, rows: list, total: total}}
@@ -38,10 +38,10 @@ module.exports.del = async(ctx, next)=> {
     let id = ctx.request.body.id;
 
     let data = await db.Project.findOne({_id: id})
-    if (data.files && data.files.length && data.files[0].url) {
-        let url = data.files[0].url
+    if (data.files && data.files.length) {
+        let url = data.files[0]
         let index = url.lastIndexOf('/')
-        url = data.files[0].url.substring(0, index)
+        url = data.files[0].substring(0, index)
         await file.rmDir(process.cwd() + url)
     }
 
@@ -51,23 +51,26 @@ module.exports.del = async(ctx, next)=> {
 
 module.exports.edit = async(ctx, next)=> {
     let id = ctx.request.body.fields.id;
-    let name_cn = ctx.request.body.fields.name_cn;
-    let name_en = ctx.request.body.fields.name_en;
     let time = new Date(ctx.request.body.fields.time).getTime();
     let type = Number.parseInt(ctx.request.body.fields.type)
-    let contents = JSON.parse(ctx.request.body.fields.contents)
+    let name_cn = ctx.request.body.fields.name_cn;
+    let name_en = ctx.request.body.fields.name_en;
+    let content_cn = ctx.request.body.fields.content_cn;
+    let content_en = ctx.request.body.fields.content_en;
+    let urls = JSON.parse(ctx.request.body.fields.urls);
 
     let files = ctx.request.body.files
 
     let webDir = ''
+    let dbFiles = []//存到数据库的最终数组
     if (id) {//更新项目
         let project = await db.Project.findOne({_id: id})
-        if (project.files && project.files.length && project.files[0].url) {
-            let url = project.files[0].url
+        if (project.files && project.files.length) {
+            let url = project.files[0]
             let index = url.lastIndexOf('/')
-            webDir = project.files[0].url.substring(0, index)
+            webDir = url.substring(0, index)
             let exists = await file.exists(process.cwd() + webDir)
-            if(!exists){
+            if (!exists) {
                 await file.mkDir(process.cwd() + webDir)
             }
         } else {
@@ -79,42 +82,42 @@ module.exports.edit = async(ctx, next)=> {
         }
         webDir = webDir + '/'
         //删除旧文件
-        let allFiles = []
-        for (let item of project.files) {
-            if (item.url) {
-                allFiles.push(item.url)
-            }
-        }
+        let allFiles = project.files
 
-        for (let i = 0; i < contents.length; i++) {  //表单文件
-            if (contents[i].url) {
-                contents[i].url = contents[i].url.substring(contents[i].url.indexOf('/static'))
-                let index = allFiles.indexOf(contents[i].url)
+        for (let i = 0; i < urls.length; i++) {  //表单文件
+            if (urls[i]) {
+                urls[i] = urls[i].substring(urls[i].indexOf('/static'))
+                let index = allFiles.indexOf(urls[i])
                 if (index > -1) {
                     allFiles.splice(index, 1)
                 }
             }
         }
         for (let url of allFiles) {
-            //  console.info(process.cwd() + url,"del")
             await file.delete(process.cwd() + url)
         }
 
 
-        for (let i = 0; i < contents.length; i++) {
+        for (let i = 0; i < urls.length; i++) {
             if (files['file' + i]) {
                 let filePath = files['file' + i].path //requset中的图片存放地址
-                let webPath = webDir + files['file' + i].name //网站文件图片存放地址
+                let webPath = `${webDir}${i}_${files['file' + i].name}` //网站文件图片存放地址
                 await file.move(filePath, process.cwd() + webPath) //从临时目录移动到网站目录,成功返回1，失败返回error对象
-                contents[i].url = webPath
+                dbFiles.push(webPath)
+            } else {
+                dbFiles.push(urls[i])
             }
         }
         let data = {
-            name: {
-                cn: name_cn,
-                en: name_en
+            cn: {
+                name: name_cn,
+                content: content_cn,
             },
-            files: contents,
+            en: {
+                name: name_en,
+                content: content_en,
+            },
+            files: dbFiles,
             time: time,
             type: type
         }
@@ -130,19 +133,22 @@ module.exports.edit = async(ctx, next)=> {
             return ctx.body = {"status": 10, "message": result}
         }
         webDir = webDir + '/'
-
-        for (let i = 0; i < contents.length; i++) {
+        for (let i = 0; i < urls.length; i++) {
             let filePath = files['file' + i].path //requset中的图片存放地址
-            let webPath = webDir + files['file' + i].name //网站文件图片存放地址
+            let webPath = `${webDir}${i}_${files['file' + i].name}` //网站文件图片存放地址
             await file.move(filePath, process.cwd() + webPath) //从临时目录移动到网站目录,成功返回1，失败返回error对象
-            contents[i].url = webPath
+            dbFiles.push(webPath)
         }
         let data = {
-            name: {
-                cn: name_cn,
-                en: name_en
+            cn: {
+                name: name_cn,
+                content: content_cn,
             },
-            files: contents,
+            en: {
+                name: name_en,
+                content: content_en,
+            },
+            files: dbFiles,
             time: time,
             type: type
         }

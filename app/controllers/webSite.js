@@ -107,20 +107,20 @@ let queryProject = async(ctx, next, type)=> {
     if (type) {
         where.type = type
     }
-    let result = await db.Project.find(where).sort({"time": 1})
+    let result = await db.Project.find(where).sort({"time": -1})
     if (!(result instanceof Error)) {
         let list = []
         for (let item of result) {
             let temp = []
             item.files.forEach(file=> {
                 temp.push({
-                    url: ctx.serverOrigin + file.url,
-                    content: file[ctx.session.language]
+                    url: ctx.serverOrigin + file
                 })
             })
             list.push({
                 id:item._id,
-                name: item.name[ctx.session.language],
+                name: item[ctx.session.language].name,
+                content:item[ctx.session.language].content,
                 time: item.time,
                 type: item.type,
                 files: temp

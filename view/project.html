@@ -59,17 +59,19 @@
         }
 
         .item__text {
-            width: 120px;
-            text-align: right;
-            float: left;
+            text-align: left;
+            padding-left: 60px;
         }
 
         .item__text--name {
             font-size: 14px;
+            line-height: 22px;
         }
 
         .item__text--time {
+            padding-left: 20px;
             font-size: 12px;
+            line-height: 20px;
         }
 
         .swiper-container {
@@ -104,10 +106,8 @@
         }
 
         .project__list .files {
-            position: absolute;
-            left: 130px;
-            right: 40px;
-            padding: 0 30px;
+            position: relative;
+            padding: 0 60px;
         }
 
         .project__list .swiper-button {
@@ -122,28 +122,34 @@
 
         .project__list .swiper-button-prev {
             background-image: url("../static/img/left_s.png");
-            left: 0px;
+            left: 40px;
         }
 
         .project__list .swiper-button-next {
             background-image: url("../static/img/right_s.png");
-            right: 0px;
+            right: 40px;
         }
 
         .perview {
             position: fixed;
             width: 100%;
-            height: 100%;
+            min-height: 100%;
             z-index: 100;
+            overflow-y: auto;
+            overflow-x: hidden;
             display: none;
         }
 
         .perview .swiper-container {
             width: 70%;
-            height: 70%;
             position: absolute;
-            top: 15%;
+            top: 50%;
             left: 15%;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            -o-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            transform: translateY(-50%);
         }
 
         .perview .swiper-slide {
@@ -209,8 +215,10 @@
         }
 
         .project__info {
-            width: 50%;
+            width: 55%;
             height: 30%;
+            min-height: 150px;
+            max-height: 40%;
             background: rgba(0, 0, 0, 0.85);
             position: absolute;
             z-index: 10;
@@ -227,6 +235,8 @@
             -moz-transition: 0.5s;
             transition: 0.5s;
             color: #ffffff;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .project__info--active {
@@ -238,50 +248,52 @@
         }
 
         .project__info--top {
-            height: 20px;
-            position: absolute;
-            left: 10px;
-            top: 10px;
-            right: 10px;
             text-align: left;
+            line-height: 20px;
+            padding: 5px 25px 0 10px;
+            position: relative;
         }
 
         .project__info--close {
             width: 15px;
             height: 15px;
             position: absolute;
-            right: 0;
+            top: 10px;
+            right: 10px;
             background: url("../static/img/close_big.png") no-repeat;
             background-size: 15px 15px;
-            background-position: center right;
+            background-position: center center;
             cursor: pointer;
         }
 
         .project__info--text {
             position: absolute;
             left: 10px;
-            right: 10px;
-            top: 40px;
+            right: 20px;
+            top: 45px;
             bottom: 10px;
             overflow-y: auto;
-            font-size: 14px;
+            font-size: 12px;
             line-height: 18px;
             text-align: left;
             padding-right: 5px;
         }
 
         .project__info--name {
-            padding: 0px 20px;
+            /*padding: 0px 20px;*/
+            /*display: inline-block;*/
+            font-size: 14px;
         }
 
         .project__info--time {
-
+            margin-left: 20px;
         }
 
         .project__info--index {
-            display: inline-block;
-            float: right;
-            margin-right: 120px;
+            /*display: inline-block;*/
+            /*float: right;*/
+            /*margin-right: 120px;*/
+            margin-left: 20px;
         }
 
         .project__info--text::-webkit-scrollbar {
@@ -310,7 +322,7 @@
 <div class="warp">
     <div class="project__list">
         <% list.forEach(function(item){ %>
-        <div class="project__item" id="<%=item.id%>">
+        <div class="project__item" id="<%=item.id%>" data-content="<%=item.content%>">
             <div class="item__text">
                 <span class="item__text--name"><%=item.name%></span>
                 <span class="item__text--time"><%=new Date(item.time).getFullYear()%></span>
@@ -323,7 +335,7 @@
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
                         <% item.files.forEach(function(file){ %>
-                        <div class="swiper-slide" data-content="<%=file.content%>">
+                        <div class="swiper-slide">
                             <% if(file.url.split('.').pop()=="mp4"){ %>
                             <video class="video" src="<%=file.url%>" type="video/mp4">
                                 你的浏览器不支持播放视频
@@ -362,6 +374,11 @@
         return svalue ? svalue[1] : svalue;
     }
 
+    var $swiperContainer = $('.perview .swiper-container')
+
+    $swiperContainer.height($('body').width() * 0.40)
+
+
     var h = $(".files:eq(0)").width() * 0.12;
     $(".project__item").height(h)
     $(".files .swiper-slide").height(h)
@@ -394,8 +411,12 @@
         $(".project__list").hide()
         var self = this;
         setTimeout(function () {
-            $(".perview").show()
+            $(".perview").show(0,function () {
+                $(".perview__btn-warp").css("top", $swiperContainer.offset().top + $swiperContainer.height() + 10)
+            })
             $(".perview__btn-warp").show()
+
+
             if (!window.swiper) {
                 window.swiper = new Swiper('.perview .swiper-container', {
                     height: 500,
@@ -430,7 +451,7 @@
 
             $(".perview__btn-warp--name").html(name)
             $(".perview__btn-warp--time").html(time)
-
+            var content = $(self).parents(".project__item")[0].dataset.content
             slideList.each(function (index) {
                 var img = $(this).find("img")
                 var html = ''
@@ -440,7 +461,6 @@
                     var src = $(this).find("video").attr("src")
                     html = '<video src="' + src + '" type="video/mp4"> </video><div class="video__play"></div>'
                 }
-                var content = this.dataset.content
                 var close = '<div class="project__info--top"><span class="project__info--name">' + name + '</span><span class="project__info--time">' + time + '</span><span class="project__info--index">' + (index + 1) + '/' + slideList.length + '</span><span class="project__info--close"></span></div>'
                 html = '<div class="swiper-slide"><div class="project__info">' + close + '<div class="project__info--text">' + content + '</div></div>' + html + '</div>'
 

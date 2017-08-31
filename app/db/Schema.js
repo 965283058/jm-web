@@ -106,15 +106,15 @@ exports.Video = db.model('Video', VideoSchema);
 
 //项目
 var ProjectSchema = new Schema({
-    name: {
-        cn: String,
-        en: String
+    cn: {
+        name: String,
+        content: String
     },
-    files: [{
-        url: String,
-        cn: String,
-        en: String
-    }],
+    en: {
+        name: String,
+        content: String
+    },
+    files: [String],
     time: {type: Number, default: Date.now()},
     type: Number
 });
