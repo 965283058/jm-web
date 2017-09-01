@@ -60,7 +60,7 @@
 
         .item__text {
             text-align: left;
-            padding-left: 100px;
+            padding-left: 120px;
         }
 
         .item__text--name {
@@ -107,7 +107,7 @@
 
         .project__list .files {
             position: relative;
-            padding: 0 100px;
+            padding: 0 120px;
         }
 
         .project__list .swiper-button {
@@ -117,17 +117,17 @@
             background-size: cover;
             position: absolute;
             top: 50%;
-            margin-top: -6px;
+            margin-top: -5px;
         }
 
         .project__list .swiper-button-prev {
             background-image: url("../static/img/left_s.png");
-            left: 40px;
+            left: 90px;
         }
 
         .project__list .swiper-button-next {
             background-image: url("../static/img/right_s.png");
-            right: 40px;
+            right: 90px;
         }
 
         .perview {
@@ -380,7 +380,7 @@
 
 
     var h = $(".files:eq(0)").width() * 0.12;
-    $(".project__item").height(h)
+//    $(".project__item").height(h)
     $(".files .swiper-slide").height(h)
 
     $(".files").each(function () {
