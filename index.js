@@ -69,7 +69,7 @@ app.use(async(ctx, next)=> {
 })
 
 app.use(async(ctx, next)=> {
-    ctx.serverOrigin = prod ? '' : "http://192.168.19.238:9999";
+    ctx.serverOrigin = prod ? '' : "http://127.0.0.1:9999";
     await next()
 })
 

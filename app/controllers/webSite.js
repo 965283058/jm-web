@@ -71,18 +71,21 @@ module.exports.list = async(ctx, next)=> {
         for (let item of result) {
             let imgUrl = ''
             for (let file of item.files) {
-                if (file.split('.').pop().toLowerCase() != "mp4") {
-                    imgUrl = file
+                if (file.mode == 1) {
+                    imgUrl = ctx.serverOrigin + file.url
                     break
                 }
             }
-            list.push({
-                id: item._id,
-                name: item[ctx.session.language].name,
-                content: item[ctx.session.language].content,
-                img: imgUrl
-            })
+            if (imgUrl) {
+                list.push({
+                    id: item._id,
+                    name: item[ctx.session.language].name,
+                    content: item[ctx.session.language].content,
+                    img: imgUrl
+                })
+            }
         }
+        console.info(list)
         await ctx.render('list', {list: list, router: ctx.request.url, menus: ctx.menus})
     }
 
