@@ -10,11 +10,15 @@ const koaBody = require('koa-body')
 const queryString = require('./app/utils/queryString')
 const session = require('koa-generic-session')
 
+let argvs = require('yargs').argv;
+
+let prod = argvs.p ? true : false
+
 render(app, {
     root: path.join(__dirname, 'view'),
     layout: false,
     viewExt: 'html',
-    cache: false,
+    cache: prod,
     debug: false
 });
 app.use(static(__dirname))
@@ -24,7 +28,7 @@ app.keys = ['some secret hurr'];
 
 app.use(session({
     key: 'jmAdminSid',
-    maxAge: (1000 * 60 * 60*2),//20分钟session超时
+    maxAge: (1000 * 60 * 60 * 2),//2小时session超时
     overwrite: false,
     httpOnly: true,
     rewrite: true,
@@ -65,10 +69,11 @@ app.use(async(ctx, next)=> {
 })
 
 app.use(async(ctx, next)=> {
-    ctx.serverOrigin = ''
+    ctx.serverOrigin = prod ? '' : "http://192.168.19.238:9999";
     await next()
 })
 
 app.use(router.routes(), router.allowedMethods())
 
-app.listen(80);
+let prot = prod ? 80 : 9999;
+app.listen(prot);

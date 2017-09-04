@@ -1,7 +1,7 @@
 {
-  "name": "web",
+  "name": "tm-web",
   "version": "1.0.0",
-  "description": "网站",
+  "description": "简盟网站",
   "main": "index.js",
   "dependencies": {
     "koa-body": "^2.3.0",
@@ -11,11 +11,12 @@
     "koa-router": "^7.2.1",
     "koa-static": "^4.0.1",
     "koa2": "^2.0.0-alpha.7",
-    "mongoose": "^4.11.6"
+    "mongoose": "^4.11.6",
+    "yargs": "^8.0.2"
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node index.js",
+    "start": "node index.js --p=true",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "965283058@qq.com",

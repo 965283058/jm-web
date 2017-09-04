@@ -70,7 +70,7 @@ module.exports.list = async(ctx, next)=> {
         let list = []
         for (let item of result) {
             let imgUrl = ''
-            for(let file of item.files){
+            for (let file of item.files) {
                 if (file.split('.').pop().toLowerCase() != "mp4") {
                     imgUrl = file
                     break
@@ -109,13 +109,14 @@ let queryProject = async(ctx, next, type)=> {
             let temp = []
             item.files.forEach(file=> {
                 temp.push({
-                    url: ctx.serverOrigin + file
+                    mode: file.mode,
+                    url: file.mode != 3 ? ctx.serverOrigin + file.url : file.url
                 })
             })
             list.push({
-                id:item._id,
+                id: item._id,
                 name: item[ctx.session.language].name,
-                content:item[ctx.session.language].content,
+                content: item[ctx.session.language].content,
                 time: item.time,
                 type: item.type,
                 files: temp
@@ -133,8 +134,8 @@ let queryProject = async(ctx, next, type)=> {
 
 module.exports.video = async(ctx, next)=> {
     let id = ctx.params.id
-    let data = await db.Video.findOne({'_id':id})
-    await ctx.render('video', {text:data.text,url:data.url})
+    let data = await db.Video.findOne({'_id': id})
+    await ctx.render('video', {text: data.text, url: data.url})
 }
 
 

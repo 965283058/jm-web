@@ -114,7 +114,10 @@ var ProjectSchema = new Schema({
         name: String,
         content: String
     },
-    files: [String],
+    files: [{
+        mode: Number,
+        url: String
+    }],
     time: {type: Number, default: Date.now()},
     type: Number
 });

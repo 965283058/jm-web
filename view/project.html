@@ -85,7 +85,8 @@
         }
 
         .project__list .swiper-wrapper img,
-        .project__list .swiper-wrapper video {
+        .project__list .swiper-wrapper video,
+        .project__list .swiper-wrapper embed{
             min-width: 100%;
             height: 100%;
             vertical-align: middle;
@@ -103,6 +104,15 @@
             background-size: 100%;
             z-index: 1;
             cursor: pointer;
+        }
+        .video__model{
+            position: absolute;
+            top:0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: transparent;
+            z-index: 10;
         }
 
         .project__list .files {
@@ -158,7 +168,8 @@
         }
 
         .perview img,
-        .perview video {
+        .perview video,
+        .perview embed{
             width: 100%;
             height: 100%;
         }
@@ -320,7 +331,9 @@
 <% include menu.html %>
 <div class="bg"></div>
 <div class="warp">
+
     <div class="project__list">
+        <!--<embed src='http://player.youku.com/player.php/sid/XMjk5NTYxMDk4NA==/v.swf' height="320" width="480" allowFullScreen='true' quality='high'  align='middle' allowScriptAccess='always' type='application/x-shockwave-flash'></embed>-->
         <% list.forEach(function(item){ %>
         <div class="project__item" id="<%=item.id%>" data-content="<%=item.content%>">
             <div class="item__text">
@@ -335,15 +348,18 @@
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
                         <% item.files.forEach(function(file){ %>
-                        <div class="swiper-slide">
-                            <% if(file.url.split('.').pop()=="mp4"){ %>
+                        <div class="swiper-slide" mode="<%=file.mode%>">
+                            <% if(file.mode==1){ %>
+                            <img src="<%=file.url%>" class="swiper-lazy" alt="">
+                            <% }else if(file.mode==2){ %>
                             <video class="video" src="<%=file.url%>" type="video/mp4">
                                 你的浏览器不支持播放视频
                             </video>
                             <div class="video__play"></div>
-                            <% }else{ %>
-                            <img data-src="<%=file.url%>" class="swiper-lazy" alt="">
-                            <% } %>
+                            <% }else{%>
+                            <%- file.url%>
+                            <div class="video__model"></div>
+                            <%}%>
                         </div>
                         <% })%>
                     </div>
@@ -352,6 +368,8 @@
 
         </div>
         <% })%>
+
+        <div class="project__item" id="test"></div>
     </div>
 </div>
 <div class="perview">
@@ -380,7 +398,7 @@
 
 
     var h = $(".files:eq(0)").width() * 0.12;
-//    $(".project__item").height(h)
+
     $(".files .swiper-slide").height(h)
 
     $(".files").each(function () {
@@ -389,17 +407,19 @@
             paginationClickable: true,
             slidesPerView: 6,
             spaceBetween: 5,
-            lazyLoading: true,
+            preloadImages: true,
             prevButton: $(this).find(".swiper-button-prev"),
             nextButton: $(this).find(".swiper-button-next")
         });
     })
 
+    $(".files iframe").width("100%").height("100%")
+
     $(".project__list").css("visibility", "visible")
 
     $(".perview").click(function (e) {
         if (e.target.tagName != "IMG" && e.target.tagName != "VIDEO" && e.target.className.indexOf('swiper-button-') != 0 && e.target.className.indexOf('video__play') != 0) {
-            $(this).hide()
+            $(this).hide().find(".swiper-slide").remove()
             $('.project__list').show()
             document.body.scrollTop = window.st || 0
         }
@@ -411,7 +431,7 @@
         $(".project__list").hide()
         var self = this;
         setTimeout(function () {
-            $(".perview").show(0,function () {
+            $(".perview").show(0, function () {
                 $(".perview__btn-warp").css("top", $swiperContainer.offset().top + $swiperContainer.height() + 10)
             })
             $(".perview__btn-warp").show()
@@ -430,10 +450,19 @@
                         } else {
                             index = index - 1
                         }
-                        var video = $(".perview .swiper-slide:eq(" + index + ")").find("video")
+
+                        var $slider=$(".perview .swiper-slide:eq(" + index + ")");
+                        var video = $slider.find("video")
                         if (video.length) {
                             video[0].pause()
                         }
+                        var iframe = $slider.find("iframe")
+                        if(iframe.length){
+                            var html=$slider.html()
+                            $slider.empty().html(html)
+
+                        }
+
                         if ($(".perview .swiper-slide-active").find(".project__info--active").length) {
                             $(".perview__btn-warp").hide()
                         } else {
@@ -453,13 +482,15 @@
             $(".perview__btn-warp--time").html(time)
             var content = $(self).parents(".project__item")[0].dataset.content
             slideList.each(function (index) {
-                var img = $(this).find("img")
+                var mode = $(this).attr("mode")
                 var html = ''
-                if (img.length) {
-                    html = '<img src="' + (img.attr("src") || img.attr("data-src")) + '">'
-                } else {
+                if (mode == "1") {
+                    html = '<img src="' + ($(this).find("img").attr("src") || $(this).find("img").attr("data-src")) + '">'
+                } else if (mode == "2") {
                     var src = $(this).find("video").attr("src")
                     html = '<video src="' + src + '" type="video/mp4"> </video><div class="video__play"></div>'
+                } else {
+                    html = $(this).html()
                 }
                 var close = '<div class="project__info--top"><span class="project__info--name">' + name + '</span><span class="project__info--time">' + time + '</span><span class="project__info--index">' + (index + 1) + '/' + slideList.length + '</span><span class="project__info--close"></span></div>'
                 html = '<div class="swiper-slide"><div class="project__info">' + close + '<div class="project__info--text">' + content + '</div></div>' + html + '</div>'
@@ -481,21 +512,27 @@
             })
             window.swiper.slideTo(selectIndex, 0, false)
 
-            $(".perview .video__play").click(function () {
+            $(".perview .video__model").remove()
+
+            $(".perview .video__play").click(function (e) {
+
                 $(this).hide()
                 var video = $(this).prev("video")
-                video.prop("controls", true)[0].play()
-                video[0].onpause = function () {
-                    $(this).prop("controls", false)
-                    $(this).next().show()
+                if(video){
+                    video.prop("controls", true)[0].play()
+                    video[0].onpause = function () {
+                        $(this).prop("controls", false)
+                        $(this).next().show()
+                    }
+                    video[0].onplay = function () {
+                        $(this).prop("controls", true)
+                        $(this).next().hide()
+                    }
+                    video[0].onclick = function () {
+                        $(this).next().hide()
+                    }
                 }
-                video[0].onplay = function () {
-                    $(this).prop("controls", true)
-                    $(this).next().hide()
-                }
-                video[0].onclick = function () {
-                    $(this).next().hide()
-                }
+                return false
             })
 
             $(".project__info--close").click(function () {
@@ -521,6 +558,11 @@
     if (id) {
         $("#" + id).find(".swiper-slide:eq(0)").click()
     }
+
+    $("embed").each(function () {
+        var $p=$(this).parent()
+        $p.html($p.html())
+    })
 
 </script>
 </body>
