@@ -94,12 +94,17 @@
         }
 
         .video__play {
-            width: 20%;
-            height: 30%;
+            width: 40px;
+            height: 40px;
             display: block;
             position: absolute;
-            left: 40%;
-            top: 40%;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate3d(-50%,-50%,0);
+            -ms-transform: translate3d(-50%,-50%,0);
+            -o-transform:translate3d(-50%,-50%,0);
+            -moz-transform:translate3d(-50%,-50%,0);
+            transform: translate3d(-50%,-50%,0);
             background: url("../static/img/logo_play.png") no-repeat;
             background-size: 100%;
             z-index: 1;
@@ -400,21 +405,25 @@
 
     var h = $(".files:eq(0)").width() * 0.12;
 
-    $(".files .swiper-slide").height(h)
+    $(".files .swiper-slide").height(h) //设置高度
+    $(".files iframe").height("100%").width(h*1.6)
+    $(".files .swiper-slide").width("auto")
+    $(".files .video__play").width(h*0.3).height(h*0.3)
+
 
     $(".files").each(function () {
         var container = $(this).find(".swiper-container")[0]
         new Swiper(container, {
             paginationClickable: true,
-            slidesPerView: 6,
             spaceBetween: 5,
             preloadImages: true,
+            slidesPerView: 'auto',
             prevButton: $(this).find(".swiper-button-prev"),
             nextButton: $(this).find(".swiper-button-next")
         });
     })
 
-    $(".files iframe").width("100%").height("100%")
+
 
     $(".project__list").css("visibility", "visible")
 
@@ -498,8 +507,10 @@
 
                 window.swiper.appendSlide(html)
             })
+            $(".perview iframe").width("100%")
             var oldSrc = $(self).find("img,video").attr("src")
             var selectIndex = 0;
+
             $(".perview .swiper-slide").each(function (i) {
                 var img = $(this).find("img")
                 if (img.length == 1 && img.attr('src') == oldSrc) {
