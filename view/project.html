@@ -9,7 +9,7 @@
     <%})%>
     <link rel="stylesheet" href="../static/css/swiper.min.css">
     <script src="../static/js/jquery-1.10.1.min.js"></script>
-    <script src="../static/js/classList.js"></script>
+    <!--<script src="../static/js/classList.js"></script>-->
     <script src="../static/js/swiper.min.js"></script>
     <style>
         * {
@@ -87,7 +87,7 @@
 
         .project__list .swiper-wrapper img,
         .project__list .swiper-wrapper video,
-        .project__list .swiper-wrapper embed{
+        .project__list .swiper-wrapper embed {
             /*min-width: 100%;*/
             height: 100%;
             vertical-align: middle;
@@ -101,19 +101,20 @@
             position: absolute;
             left: 50%;
             top: 50%;
-            -webkit-transform: translate3d(-50%,-50%,0);
-            -ms-transform: translate3d(-50%,-50%,0);
-            -o-transform:translate3d(-50%,-50%,0);
-            -moz-transform:translate3d(-50%,-50%,0);
-            transform: translate3d(-50%,-50%,0);
+            -webkit-transform: translate3d(-50%, -50%, 0);
+            -ms-transform: translate3d(-50%, -50%, 0);
+            -o-transform: translate3d(-50%, -50%, 0);
+            -moz-transform: translate3d(-50%, -50%, 0);
+            transform: translate3d(-50%, -50%, 0);
             background: url("../static/img/logo_play.png") no-repeat;
             background-size: 100%;
             z-index: 1;
             cursor: pointer;
         }
-        .video__model{
+
+        .video__model {
             position: absolute;
-            top:0;
+            top: 0;
             bottom: 0;
             left: 0;
             right: 0;
@@ -168,16 +169,21 @@
             transform: translateY(-50%);
         }
 
-        .perview .swiper-slide {
-            width: 100%;
+        .perview .swiper-container .swiper-slide {
+            width: auto;
             text-align: center;
-            background: rgba(0,0,0,1);
+        }
+
+        .swiper-slide--warp{
+            width: auto;
+            height: 100%;
+            position: relative;
+            display: inline-block;
         }
 
         .perview img,
         .perview video,
-        .perview embed{
-            /*width: 100%;*/
+        .perview embed {
             height: 100%;
         }
 
@@ -231,16 +237,21 @@
             margin-left: 30px;
             cursor: pointer;
         }
+        .perview__btn-warp--index{
+            margin-left: 30px;
+        }
 
         .project__info {
-            width: 55%;
             height: 30%;
             min-height: 150px;
             max-height: 40%;
             background: rgba(255, 64, 138, 0.75);
             position: absolute;
-            z-index: 10;
+            left: 0;
+            right: 0;
             bottom: 0;
+            z-index: 10;
+
             -webkit-transform: translateY(100%);
             -ms-transform: translateY(100%);
             -o-transform: translateY(100%);
@@ -298,8 +309,6 @@
         }
 
         .project__info--name {
-            /*padding: 0px 20px;*/
-            /*display: inline-block;*/
             font-size: 14px;
         }
 
@@ -308,9 +317,6 @@
         }
 
         .project__info--index {
-            /*display: inline-block;*/
-            /*float: right;*/
-            /*margin-right: 120px;*/
             margin-left: 20px;
         }
 
@@ -340,7 +346,6 @@
 <div class="warp">
 
     <div class="project__list">
-        <!--<embed src='http://player.youku.com/player.php/sid/XMjk5NTYxMDk4NA==/v.swf' height="320" width="480" allowFullScreen='true' quality='high'  align='middle' allowScriptAccess='always' type='application/x-shockwave-flash'></embed>-->
         <% list.forEach(function(item){ %>
         <div class="project__item" id="<%=item.id%>" data-content="<%=item.content%>">
             <div class="item__text">
@@ -387,6 +392,7 @@
         <span class="perview__btn-warp--name"></span>
         <span class="perview__btn-warp--time"></span>
         <span class="perview__btn-warp--more">Read more</span>
+        <span class="perview__btn-warp--index"></span>
     </div>
     <div class="swiper-button-prev"></div>
     <div class="swiper-button-next"></div>
@@ -407,9 +413,9 @@
     var h = $(".files:eq(0)").width() * 0.12;
 
     $(".files .swiper-slide").height(h) //设置高度
-    $(".files iframe").height("100%").width(h*1.6)
+    $(".files iframe").height("100%").width(h * 1.6)
     $(".files .swiper-slide").width("auto")
-    $(".files .video__play").width(h*0.3).height(h*0.3)
+    $(".files .video__play").width(h * 0.3).height(h * 0.3)
 
 
     $(".files").each(function () {
@@ -423,7 +429,6 @@
             nextButton: $(this).find(".swiper-button-next")
         });
     })
-
 
 
     $(".project__list").css("visibility", "visible")
@@ -447,10 +452,8 @@
             })
             $(".perview__btn-warp").show()
 
-
             if (!window.swiper) {
                 window.swiper = new Swiper('.perview .swiper-container', {
-                    height: 500,
                     loop: true,
                     nextButton: '.perview .swiper-button-next',
                     prevButton: '.perview .swiper-button-prev',
@@ -461,17 +464,17 @@
                         } else {
                             index = index - 1
                         }
+                        $(".perview .perview__btn-warp--index").html($(".perview .swiper-slide-active").find(".project__info--index").html())
 
-                        var $slider=$(".perview .swiper-slide:eq(" + index + ")");
+                        var $slider = $(".perview .swiper-slide:eq(" + index + ")");
                         var video = $slider.find("video")
                         if (video.length) {
                             video[0].pause()
                         }
                         var iframe = $slider.find("iframe")
-                        if(iframe.length){
-                            var html=$slider.html()
+                        if (iframe.length) {
+                            var html = $slider.html()
                             $slider.empty().html(html)
-
                         }
 
                         if ($(".perview .swiper-slide-active").find(".project__info--active").length) {
@@ -485,30 +488,34 @@
                 window.swiper.removeAllSlides()
             }
 
-            var slideList = $(self).parent().find(".swiper-slide")
+
             var name = $(self).parents('.project__item').find(".item__text--name").html()
             var time = $(self).parents('.project__item').find(".item__text--time").html()
 
             $(".perview__btn-warp--name").html(name)
             $(".perview__btn-warp--time").html(time)
             var content = $(self).parents(".project__item")[0].dataset.content
+            var slideList = $(self).parent().find(".swiper-slide")
+
             slideList.each(function (index) {
                 var mode = $(this).attr("mode")
-                var html = ''
+                var media = ''
                 if (mode == "1") {
-                    html = '<img src="' + ($(this).find("img").attr("src") || $(this).find("img").attr("data-src")) + '">'
+                    media = '<img src="' + $(this).find("img").attr("src") + '">'
                 } else if (mode == "2") {
                     var src = $(this).find("video").attr("src")
-                    html = '<video src="' + src + '" type="video/mp4"> </video><div class="video__play"></div>'
+                    media = '<video src="' + src + '" type="video/mp4"> </video><div class="video__play"></div>'
                 } else {
-                    html = $(this).html()
+                    media = $(this).html()
                 }
-                var close = '<div class="project__info--top"><span class="project__info--name">' + name + '</span><span class="project__info--time">' + time + '</span><span class="project__info--index">' + (index + 1) + '/' + slideList.length + '</span><span class="project__info--close"></span></div>'
-                html = '<div class="swiper-slide"><div class="project__info">' + close + '<div class="project__info--text">' + content + '</div></div>' + html + '</div>'
-
+                var info_top = '<div class="project__info--top"><span class="project__info--name">' + name + '</span><span class="project__info--time">' + time + '</span><span class="project__info--index">' + (index + 1) + '/' + slideList.length + '</span><span class="project__info--close"></span></div>'
+                var info = '<div class="project__info">' + info_top + '<div class="project__info--text">' + content + '</div></div>'
+                var warp = '<div class="swiper-slide--warp">'+info + media+'</div>'
+                var html = '<div class="swiper-slide">' + warp + '</div>'
                 window.swiper.appendSlide(html)
             })
-            $(".perview iframe").width("100%")
+            $(".perview iframe").width($(".perview .swiper-wrapper").width())
+
             var oldSrc = $(self).find("img,video").attr("src")
             var selectIndex = 0;
 
@@ -524,6 +531,7 @@
                 }
             })
             window.swiper.slideTo(selectIndex, 0, false)
+            $(".perview__btn-warp--index").html(selectIndex+"/"+slideList.length)
 
             $(".perview .video__model").remove()
 
@@ -531,7 +539,7 @@
 
                 $(this).hide()
                 var video = $(this).prev("video")
-                if(video){
+                if (video) {
                     video.prop("controls", true)[0].play()
                     video[0].onpause = function () {
                         $(this).prop("controls", false)
@@ -573,7 +581,7 @@
     }
 
     $("embed").each(function () {
-        var $p=$(this).parent()
+        var $p = $(this).parent()
         $p.html($p.html())
     })
 
