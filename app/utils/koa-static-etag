@@ -17,7 +17,7 @@ module.exports = function (opts) {
             )) {
             options.setHeaders = function (res, path, stats) {
                 if (stats.isFile()) {
-                    if (options.mode == 'etag') {
+                    if (options.mode == 'etag'||options.mode===true) {
                         console.info("eee")
                         let etag = `${stats.mtime.getTime().toString(16)}-${stats.size.toString(16)}`
                         let match = ctx.request.header && ctx.request.header['if-none-match']
