@@ -3,7 +3,7 @@ let app = new koa();
 let router = require('./router/index')
 let render = require('koa-ejs')
 let path = require('path')
-let static = require('koa-static')
+let static = require('./app/utils/koa-static-etag')
 let menu = require('./app/controllers/menu')
 const adminPower = require('./app/controllers/adminPower')
 const koaBody = require('koa-body')
@@ -21,7 +21,11 @@ render(app, {
     cache: prod,
     debug: false
 });
-app.use(static(__dirname))
+app.use(static({
+    root: __dirname,
+    pathMatch: /^(\/tm-admin)|(\/static)/,
+    mode:true
+}))
 app.use(koaBody({multipart: true}))
 app.use(queryString)
 app.keys = ['some secret hurr'];
