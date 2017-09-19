@@ -3,7 +3,7 @@ let app = new koa();
 let router = require('./router/index')
 let render = require('koa-ejs')
 let path = require('path')
-let static = require('./app/utils/koa-static-etag')
+let staticEtag = require('koa-static-etag')
 let menu = require('./app/controllers/menu')
 const adminPower = require('./app/controllers/adminPower')
 const koaBody = require('koa-body')
@@ -21,9 +21,10 @@ render(app, {
     cache: prod,
     debug: false
 });
-app.use(static({
+app.use(staticEtag({
     root: __dirname,
     pathMatch: /^(\/tm-admin)|(\/static)/,
+    extMatch: /[^(mp4)]$/i,
     mode:true
 }))
 app.use(koaBody({multipart: true}))
