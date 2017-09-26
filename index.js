@@ -39,9 +39,9 @@ app.use(session({
     rewrite: true,
     signed: true
 }, app));
-app.use(async (ctx,next)=>{
+/*app.use(async (ctx,next)=>{
     ctx.setHeaders("cache-control","max-age=80000")
-})
+})*/
 
 app.use(async(ctx, next)=> {
     if (!ctx.session.language) {
