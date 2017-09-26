@@ -1,6 +1,8 @@
-var db = require("../../db/Schema");
-var file = require("../../utils/file")
-var util = require("../../utils/index")
+const db = require("../../db/Schema");
+const file = require("../../utils/file");
+const util = require("../../utils/index");
+const videoFastStart = require("../../utils/videoFastStart");
+
 
 module.exports.list = async(ctx, next)=> {
     let page = Number.parseInt(ctx.request.body.page) || 1
@@ -39,7 +41,10 @@ module.exports.edit = async(ctx, next)=> {
         let videoPath = video.path //requset中的图片存放地址
         let ext = video.name.split(".").pop()
         webPath = '/static/upload/video/' + util.guid() + "." + ext //网站视频存放地址
-        moveResult = await file.move(videoPath, process.cwd() + webPath) //从临时目录移动到网站目录,成功返回1，失败返回error对象
+        let path = process.cwd() + webPath
+        moveResult = await file.move(videoPath, path) //从临时目录移动到网站目录,成功返回1，失败返回error对象
+        path = await videoFastStart(path)//修改视频的video medadata位置h
+        webPath=path.replace(process.cwd(),"")
     }
 
     if (moveResult === 1 || moveResult === 0) {

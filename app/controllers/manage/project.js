@@ -1,6 +1,7 @@
-var db = require("../../db/Schema");
-var file = require("../../utils/file")
-var util = require("../../utils/index")
+const db = require("../../db/Schema");
+const file = require("../../utils/file")
+const util = require("../../utils/index")
+const videoFastStart=require("../../utils/videoFastStart")
 
 module.exports.list = async(ctx, next)=> {
     let name_cn = decodeURI(ctx.request.body.name_cn || '')
@@ -113,7 +114,12 @@ module.exports.edit = async(ctx, next)=> {
                 if (files['file' + i]) {
                     let filePath = files['file' + i].path //requset中的图片存放地址
                     let webPath = `${webDir}${i}_${files['file' + i].name}` //网站文件图片存放地址
-                    await file.move(filePath, process.cwd() + webPath) //从临时目录移动到网站目录,成功返回1，失败返回error对象
+                    let absolutePath=process.cwd() + webPath
+                    await file.move(filePath, absolutePath) //从临时目录移动到网站目录,成功返回1，失败返回error对象
+                    if(item.mode==2){
+                        absolutePath = await videoFastStart(absolutePath)//修改视频的video medadata位置h
+                        webPath=absolutePath.replace(process.cwd(),"")
+                    }
                     dbFiles.push({
                         mode: item.mode,
                         url: webPath
@@ -161,8 +167,13 @@ module.exports.edit = async(ctx, next)=> {
             if (fileObj[i].mode != 3) {
                 let filePath = files['file' + i].path //requset中的图片存放地址
                 let webPath = `${webDir}${i}_${files['file' + i].name}` //网站文件图片存放地址
-                await file.move(filePath, process.cwd() + webPath) //从临时目录移动到网站目录,成功返回1，失败返回error对象
+                let absolutePath=process.cwd() + webPath
+                await file.move(filePath, absolutePath) //从临时目录移动到网站目录,成功返回1，失败返回error对象
 
+                if(fileObj[i].mode==2){
+                    absolutePath = await videoFastStart(absolutePath)//修改视频的video medadata位置h
+                    webPath=absolutePath.replace(process.cwd(),"")
+                }
                 dbFiles.push({
                     mode: fileObj[i].mode,
                     url: webPath

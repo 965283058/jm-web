@@ -10,20 +10,26 @@
             overflow: hidden;
         }
         .warp{
-            width: 1024px;
+            width: 100%;
             height: 100%;
             margin: 0px auto;
-
+            overflow-y: auto;
         }
         .title{
             text-align: center;
+        }
+        video{
+            display: block;
+            max-width: 1024px;
+            max-height: 600px;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
 <div class="warp">
     <h1 class="title"><%=text%></h1>
-    <video  controls width="1024" preload>
+    <video  controls  preload autoplay>
         <source src="<%=url%>" type="video/mp4" />
         不支持视频
     </video>
