@@ -39,11 +39,13 @@ app.use(session({
     rewrite: true,
     signed: true
 }, app));
-
+app.use(async (ctx,next)=>{
+    ctx.setHeaders("cache-control","max-age=80000")
+})
 
 app.use(async(ctx, next)=> {
     if (!ctx.session.language) {
-        ctx.session.language = 'cn'
+        ctx.session.language = 'en'
     }
     let oldPath = ctx.request.header.referer || '/'
     if (ctx.request.url == "/cn") {
