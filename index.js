@@ -24,7 +24,7 @@ render(app, {
 app.use(staticEtag({
     root: __dirname,
     pathMatch: /^(\/tm-admin)|(\/static)/,
-    extMatch: /[^(mp4)]$/i,
+    // extMatch: /[^(mp4)]$/i,
     mode:true
 }))
 app.use(koaBody({multipart: true}))
