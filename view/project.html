@@ -366,7 +366,7 @@
                             <% if(file.mode==1){ %>
                             <img src="<%=file.url%>" class="swiper-lazy" alt="">
                             <% }else if(file.mode==2){ %>
-                            <video class="video" src="<%=file.url%>" type="video/mp4">
+                            <video class="video" preload="meta" src="<%=file.url%>" type="video/mp4">
                                 你的浏览器不支持播放视频
                             </video>
                             <div class="video__play"></div>
