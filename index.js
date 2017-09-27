@@ -1,14 +1,16 @@
-let koa = require('koa2');
-let app = new koa();
-let router = require('./router/index')
-let render = require('koa-ejs')
-let path = require('path')
-let staticEtag = require('koa-static-etag')
-let menu = require('./app/controllers/menu')
+const koa = require('koa2');
+const app = new koa();
+const router = require('./router/index')
+const render = require('koa-ejs')
+const path = require('path')
+const staticEtag = require('koa-static-etag')
+const menu = require('./app/controllers/menu')
 const adminPower = require('./app/controllers/adminPower')
 const koaBody = require('koa-body')
 const queryString = require('./app/utils/queryString')
 const session = require('koa-generic-session')
+const video206=require("./app/utils/video")
+
 
 let argvs = require('yargs').argv;
 
@@ -21,12 +23,17 @@ render(app, {
     cache: prod,
     debug: false
 });
-app.use(staticEtag({
-    root: __dirname,
-    pathMatch: /^(\/tm-admin)|(\/static)/,
-    // extMatch: /[^(mp4)]$/i,
-    mode:true
-}))
+// app.use(video206())
+
+if(prod){
+    app.use(staticEtag({
+        root: __dirname,
+        pathMatch: /^(\/tm-admin)|(\/static)/,
+        extMatch: /[^(mp4)]$/i,
+        mode: true
+    }))
+}
+
 app.use(koaBody({multipart: true}))
 app.use(queryString)
 app.keys = ['some secret hurr'];
@@ -40,8 +47,8 @@ app.use(session({
     signed: true
 }, app));
 /*app.use(async (ctx,next)=>{
-    ctx.setHeaders("cache-control","max-age=80000")
-})*/
+ ctx.setHeaders("cache-control","max-age=80000")
+ })*/
 
 app.use(async(ctx, next)=> {
     if (!ctx.session.language) {
@@ -82,5 +89,5 @@ app.use(async(ctx, next)=> {
 
 app.use(router.routes(), router.allowedMethods())
 
-let prot = prod ? 80 : 9999;
-app.listen(prot);
+// let prot = prod ? 80 : 9999;
+app.listen(9999);

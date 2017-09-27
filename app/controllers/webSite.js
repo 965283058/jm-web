@@ -85,7 +85,6 @@ module.exports.list = async(ctx, next)=> {
                 })
             }
         }
-        console.info(list)
         await ctx.render('list', {list: list, router: ctx.request.url, menus: ctx.menus})
     }
 
