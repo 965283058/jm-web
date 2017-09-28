@@ -1,4 +1,4 @@
-var db = require("../../db/Schema");
+const db = require("../../db/Schema");
 
 module.exports.list = async(ctx, next)=> {
     let menus = await db.webMenu.find().sort({"index": 1})

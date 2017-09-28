@@ -1,4 +1,4 @@
-let fs = require("fs")
+const fs = require("fs")
 
 module.exports = async(ctx, next)=> {
     let url = ctx.request.url

@@ -1,8 +1,6 @@
 let router=require('koa-router')()
-
-let webSite=require('../app/controllers/webSite')
-
-let manage=require('./manage')
+const webSite=require('../app/controllers/webSite')
+const manage=require('./manage')
 
 
 router.use('/manage',manage.routes(),manage.allowedMethods())

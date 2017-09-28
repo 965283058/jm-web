@@ -1,7 +1,7 @@
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
-var db = mongoose.createConnection('127.0.0.1', 'jm'); //创建一个数据库连接
+const db = mongoose.createConnection('127.0.0.1', 'jm'); //创建一个数据库连接
 
 
 //前台菜单

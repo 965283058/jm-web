@@ -1,4 +1,4 @@
-var db = require("../db/Schema");
+const db = require("../db/Schema");
 
 module.exports.home = async(ctx, next)=> {
     let banner = await db.HomeBanner.find({status: 1}, 'img').sort({index: 1})

@@ -1,6 +1,6 @@
-var db = require("../../db/Schema");
-var file = require("../../utils/file")
-var util = require("../../utils/index")
+const db = require("../../db/Schema");
+const file = require("../../utils/file")
+const util = require("../../utils/index")
 module.exports.getInfo = async(ctx, next)=> {
     let data = await db.WebSetting.findOne({key: 'teamminus'})
     if (data instanceof Error) {

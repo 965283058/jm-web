@@ -1,5 +1,5 @@
-var db = require("../../db/Schema");
-var crypto = require('crypto');
+const db = require("../../db/Schema");
+const crypto = require('crypto');
 
 module.exports.list = async(ctx, next)=> {
     let page = Number.parseInt(ctx.request.body.page) || 1

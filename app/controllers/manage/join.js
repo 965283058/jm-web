@@ -1,4 +1,4 @@
-var db = require("../../db/Schema");
+const db = require("../../db/Schema");
 module.exports.list = async(ctx, next)=> {
     let menus = await db.JoinUs.find().sort({"index": 1})
     if (menus instanceof Array) {

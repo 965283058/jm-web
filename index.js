@@ -1,5 +1,5 @@
 const koa = require('koa2');
-const app = new koa();
+let app = new koa();
 const router = require('./router/index')
 const render = require('koa-ejs')
 const path = require('path')
@@ -23,9 +23,10 @@ render(app, {
     cache: prod,
     debug: false
 });
-// app.use(video206())
+
 
 if(prod){
+    app.use(video206())
     app.use(staticEtag({
         root: __dirname,
         pathMatch: /^(\/tm-admin)|(\/static)/,
@@ -46,9 +47,6 @@ app.use(session({
     rewrite: true,
     signed: true
 }, app));
-/*app.use(async (ctx,next)=>{
- ctx.setHeaders("cache-control","max-age=80000")
- })*/
 
 app.use(async(ctx, next)=> {
     if (!ctx.session.language) {

@@ -1,6 +1,6 @@
-var db = require("../../db/Schema");
-var file = require("../../utils/file")
-var util = require("../../utils/index")
+const db = require("../../db/Schema");
+const file = require("../../utils/file")
+const util = require("../../utils/index")
 module.exports.list = async(ctx, next)=> {
     let menus = await db.HomeBanner.find().sort({"index": 1})
     if (menus instanceof Array) {

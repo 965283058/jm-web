@@ -1,4 +1,4 @@
-var db = require("../../db/Schema");
+const db = require("../../db/Schema");
 module.exports.get = async(ctx, next)=> {
     let key = ctx.request.body.key||'';
 

@@ -1,4 +1,4 @@
-var db = require("../../db/Schema");
+const db = require("../../db/Schema");
 
 
 exports.edit = async(ctx, next)=> {
