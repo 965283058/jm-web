@@ -9,7 +9,7 @@ const adminPower = require('./app/controllers/adminPower')
 const koaBody = require('koa-body')
 const queryString = require('./app/utils/queryString')
 const session = require('koa-generic-session')
-const video206=require("./app/utils/video")
+const koaVideo = require("koa-video")
 
 
 let argvs = require('yargs').argv;
@@ -25,8 +25,10 @@ render(app, {
 });
 
 
-if(prod){
-    app.use(video206())
+if (!prod) {
+    app.use(koaVideo({
+        extMatch: /\.mp[3-4]$/i,
+    }))
     app.use(staticEtag({
         root: __dirname,
         pathMatch: /^(\/tm-admin)|(\/static)/,
@@ -81,7 +83,8 @@ app.use(async(ctx, next)=> {
 })
 
 app.use(async(ctx, next)=> {
-    ctx.serverOrigin = prod ? '' : "http://127.0.0.1:9999";
+    ctx.serverOrigin = ''
+    // ctx.serverOrigin = prod ? '' : "http://127.0.0.1:9999";
     await next()
 })
 
