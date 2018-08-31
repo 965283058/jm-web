@@ -366,7 +366,7 @@
                         <% item.files.forEach(function(file){ %>
                         <div class="swiper-slide" mode="<%=file.mode%>">
                             <% if(file.mode==1){ %>
-                            <img data-src="<%=file.url%>" class="swiper-lazy" alt="">
+                            <img src="<%=file.url%>" alt="">
                             <% }else if(file.mode==2){ %>
                             <video class="video" preload="meta" src="<%=file.url%>" type="video/mp4">
                                 你的浏览器不支持播放视频
@@ -423,10 +423,9 @@
     $(".files").each(function () {
         var container = $(this).find(".swiper-container")[0]
         new Swiper(container, {
-            lazyLoading : true,
             paginationClickable: true,
             spaceBetween: 5,
-            preloadImages: false,
+            preloadImages: true,
             slidesPerView: 'auto',
             prevButton: $(this).find(".swiper-button-prev"),
             nextButton: $(this).find(".swiper-button-next")
