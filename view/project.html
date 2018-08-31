@@ -423,9 +423,10 @@
     $(".files").each(function () {
         var container = $(this).find(".swiper-container")[0]
         new Swiper(container, {
+            lazyLoading : true,
             paginationClickable: true,
             spaceBetween: 5,
-            preloadImages: true,
+            preloadImages: false,
             slidesPerView: 'auto',
             prevButton: $(this).find(".swiper-button-prev"),
             nextButton: $(this).find(".swiper-button-next")
