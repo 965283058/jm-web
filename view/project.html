@@ -177,7 +177,7 @@
             overflow: hidden;
         }
 
-        .swiper-slide--warp{
+        .swiper-slide--warp {
             width: auto;
             max-width: 100%;
             height: 100%;
@@ -241,7 +241,8 @@
             margin-left: 30px;
             cursor: pointer;
         }
-        .perview__btn-warp--index{
+
+        .perview__btn-warp--index {
             margin-left: 30px;
         }
 
@@ -342,6 +343,10 @@
             width: 5px;
             border-radius: 10px;
         }
+
+        .project__item {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -366,16 +371,16 @@
                         <% item.files.forEach(function(file){ %>
                         <div class="swiper-slide" mode="<%=file.mode%>">
                             <% if(file.mode==1){ %>
-                            <img src="<%=file.url%>" alt="">
+                            <img data-src="<%=file.url%>" alt="">
                             <% }else if(file.mode==2){ %>
                             <video class="video" preload="meta" src="<%=file.url%>" type="video/mp4">
                                 你的浏览器不支持播放视频
                             </video>
                             <div class="video__play"></div>
                             <% }else{%>
-                                <%- file.url%>
-                                    <div class="video__model"></div>
-                                <%}%>
+                            <%- file.url%>
+                            <div class="video__model"></div>
+                            <%}%>
                         </div>
                         <% })%>
                     </div>
@@ -383,7 +388,6 @@
             </div>
         </div>
         <% })%>
-        <div class="project__item" id="test"></div>
     </div>
 </div>
 <div class="perview">
@@ -411,30 +415,6 @@
 
     $swiperContainer.height($('body').width() * 0.40)
 
-
-    var h = $(".files:eq(0)").width() * 0.12;
-
-    $(".files .swiper-slide").height(h) //设置高度
-    $(".files iframe").height("100%").width(h * 1.6)
-    $(".files .swiper-slide").width("auto")
-    $(".files .video__play").width(h * 0.3).height(h * 0.3)
-
-
-    $(".files").each(function () {
-        var container = $(this).find(".swiper-container")[0]
-        new Swiper(container, {
-            paginationClickable: true,
-            spaceBetween: 5,
-            preloadImages: true,
-            slidesPerView: 'auto',
-            prevButton: $(this).find(".swiper-button-prev"),
-            nextButton: $(this).find(".swiper-button-next")
-        });
-    })
-
-
-    $(".project__list").css("visibility", "visible")
-
     $(".perview").click(function (e) {
         if (e.target.tagName != "IMG" && e.target.tagName != "VIDEO" && e.target.className.indexOf('swiper-button-') != 0 && e.target.className.indexOf('video__play') != 0) {
             $(this).hide().find(".swiper-slide").remove()
@@ -444,147 +424,227 @@
         return false
     })
 
-    $(".project__list .swiper-slide").click(function () {
-        window.st = document.body.scrollTop
-        $(".project__list").hide()
-        var self = this;
-        setTimeout(function () {
-            $(".perview").show(0, function () {
-                $(".perview__btn-warp").css("top", $swiperContainer.offset().top + $swiperContainer.height() + 10)
-            })
-            $(".perview__btn-warp").show()
 
-            if (!window.swiper) {
-                window.swiper = new Swiper('.perview .swiper-container', {
-                    loop: true,
-                    nextButton: '.perview .swiper-button-next',
-                    prevButton: '.perview .swiper-button-prev',
-                    onSlideChangeStart: function (swiper) {
-                        var index = swiper.activeIndex
-                        if (index == 0) {
-                            index = $(".perview").find(".swiper-slide").length - 1
-                        } else {
-                            index = index - 1
-                        }
-                        $(".perview .perview__btn-warp--index").html($(".perview .swiper-slide-active").find(".project__info--index").html())
-
-                        var $slider = $(".perview .swiper-slide:eq(" + index + ")");
-                        var video = $slider.find("video")
-                        if (video.length) {
-                            video[0].pause()
-                        }
-                        var iframe = $slider.find("iframe")
-                        if (iframe.length) {
-                            var html = $slider.html()
-                            $slider.empty().html(html)
-                        }
-
-                        if ($(".perview .swiper-slide-active").find(".project__info--active").length) {
-                            $(".perview__btn-warp").hide()
-                        } else {
-                            $(".perview__btn-warp").show()
-                        }
-                    }
-                });
-            } else {
-                window.swiper.removeAllSlides()
-            }
+    var h = null
 
 
-            var name = $(self).parents('.project__item').find(".item__text--name").html()
-            var time = $(self).parents('.project__item').find(".item__text--time").html()
+    function initOther(item) {
+        if (!h) {
+            h = $(".files:visible").eq(0).width() * 0.12;
+        }
 
-            $(".perview__btn-warp--name").html(name)
-            $(".perview__btn-warp--time").html(time)
-            var content = $(self).parents(".project__item")[0].dataset.content
-            var slideList = $(self).parent().find(".swiper-slide")
+        $(item).find(".swiper-slide").height(h) //设置高度
+        $(item).find("iframe").height("100%").width(h * 1.6)
+        $(item).find(".swiper-slide").width("auto")
+        $(item).find(".video__play").width(h * 0.3).height(h * 0.3)
 
-            slideList.each(function (index) {
-                var mode = $(this).attr("mode")
-                var media = ''
-                if (mode == "1") {
-                    media = '<img src="' + $(this).find("img").attr("src") + '">'
-                } else if (mode == "2") {
-                    var src = $(this).find("video").attr("src")
-                    media = '<video src="' + src + '" type="video/mp4"> </video><div class="video__play"></div>'
-                } else {
-                    media = $(this).html()
-                }
-                var info_top = '<div class="project__info--top"><span class="project__info--name">' + name + '</span><span class="project__info--time">' + time + '</span><span class="project__info--index">' + (index + 1) + '/' + slideList.length + '</span><span class="project__info--close"></span></div>'
-                var info = '<div class="project__info">' + info_top + '<div class="project__info--text">' + content + '</div></div>'
-                var warp = '<div class="swiper-slide--warp">'+info + media+'</div>'
-                var html = '<div class="swiper-slide">' + warp + '</div>'
-                window.swiper.appendSlide(html)
-            })
-            $(".perview iframe").width($(".perview .swiper-wrapper").width())
 
-            var oldSrc = $(self).find("img,video").attr("src")
-            var selectIndex = 0;
+        $(".project__list").css("visibility", "visible")
 
-            $(".perview .swiper-slide").each(function (i) {
-                var img = $(this).find("img")
-                if (img.length == 1 && img.attr('src') == oldSrc) {
-                    selectIndex = i
-                    return false
-                }
-                if (img.length == 0 && $(this).find("video").attr("src") == oldSrc) {
-                    selectIndex = i
-                    return false
-                }
-            })
-            window.swiper.slideTo(selectIndex, 0, false)
-            $(".perview__btn-warp--index").html(selectIndex+"/"+slideList.length)
-
-            $(".perview .video__model").remove()
-
-            $(".perview .video__play").click(function (e) {
-
-                $(this).hide()
-                var video = $(this).prev("video")
-                if (video) {
-                    video.prop("controls", true)[0].play()
-                    video[0].onpause = function () {
-                        $(this).prop("controls", false)
-                        $(this).next().show()
-                    }
-                    video[0].onplay = function () {
-                        $(this).prop("controls", true)
-                        $(this).next().hide()
-                    }
-                    video[0].onclick = function () {
-                        $(this).next().hide()
-                    }
-                }
-                return false
-            })
-
-            $(".project__info--close").click(function () {
-                $(".project__info").removeClass("project__info--active")
+        $(item).find(".swiper-slide").click(function () {
+            window.st = document.body.scrollTop
+            $(".project__list").hide()
+            var self = this;
+            setTimeout(function () {
+                $(".perview").show(0, function () {
+                    $(".perview__btn-warp").css("top", $swiperContainer.offset().top + $swiperContainer.height() + 10)
+                })
                 $(".perview__btn-warp").show()
-                return false
-            })
-            $(".project__info").click(function () {
-                return false
-            })
-            $(".perview__btn-warp").click(function () {
-                return false
-            })
-            $(".perview__btn-warp--more").click(function () {
-                $(".perview .swiper-slide-active").find(".project__info").addClass("project__info--active")
-                $(this).parents(".perview__btn-warp").hide()
-                return false
-            })
-        }, 200)
-    })
 
-    var id = querySring("id")
-    if (id) {
-        $("#" + id).find(".swiper-slide:eq(0)").click()
+                if (!window.swiper) {
+                    window.swiper = new Swiper('.perview .swiper-container', {
+                        loop: true,
+                        nextButton: '.perview .swiper-button-next',
+                        prevButton: '.perview .swiper-button-prev',
+                        onSlideChangeStart: function (swiper) {
+                            var index = swiper.activeIndex
+                            if (index == 0) {
+                                index = $(".perview").find(".swiper-slide").length - 1
+                            } else {
+                                index = index - 1
+                            }
+                            $(".perview .perview__btn-warp--index").html($(".perview .swiper-slide-active").find(".project__info--index").html())
+
+                            var $slider = $(".perview .swiper-slide:eq(" + index + ")");
+                            var video = $slider.find("video")
+                            if (video.length) {
+                                video[0].pause()
+                            }
+                            var iframe = $slider.find("iframe")
+                            if (iframe.length) {
+                                var html = $slider.html()
+                                $slider.empty().html(html)
+                            }
+
+                            if ($(".perview .swiper-slide-active").find(".project__info--active").length) {
+                                $(".perview__btn-warp").hide()
+                            } else {
+                                $(".perview__btn-warp").show()
+                            }
+                        }
+                    });
+                } else {
+                    window.swiper.removeAllSlides()
+                }
+
+
+                var name = $(self).parents('.project__item').find(".item__text--name").html()
+                var time = $(self).parents('.project__item').find(".item__text--time").html()
+
+                $(".perview__btn-warp--name").html(name)
+                $(".perview__btn-warp--time").html(time)
+                var content = $(self).parents(".project__item")[0].dataset.content
+                var slideList = $(self).parent().find(".swiper-slide")
+
+                slideList.each(function (index) {
+                    var mode = $(this).attr("mode")
+                    var media = ''
+                    if (mode == "1") {
+                        media = '<img src="' + $(this).find("img").attr("src") + '">'
+                    } else if (mode == "2") {
+                        var src = $(this).find("video").attr("src")
+                        media = '<video src="' + src + '" type="video/mp4"> </video><div class="video__play"></div>'
+                    } else {
+                        media = $(this).html()
+                    }
+                    var info_top = '<div class="project__info--top"><span class="project__info--name">' + name + '</span><span class="project__info--time">' + time + '</span><span class="project__info--index">' + (index + 1) + '/' + slideList.length + '</span><span class="project__info--close"></span></div>'
+                    var info = '<div class="project__info">' + info_top + '<div class="project__info--text">' + content + '</div></div>'
+                    var warp = '<div class="swiper-slide--warp">' + info + media + '</div>'
+                    var html = '<div class="swiper-slide">' + warp + '</div>'
+                    window.swiper.appendSlide(html)
+                })
+                $(".perview iframe").width($(".perview .swiper-wrapper").width())
+
+                var oldSrc = $(self).find("img,video").attr("src")
+                var selectIndex = 0;
+
+                $(".perview .swiper-slide").each(function (i) {
+                    var img = $(this).find("img")
+                    if (img.length == 1 && img.attr('src') == oldSrc) {
+                        selectIndex = i
+                        return false
+                    }
+                    if (img.length == 0 && $(this).find("video").attr("src") == oldSrc) {
+                        selectIndex = i
+                        return false
+                    }
+                })
+                window.swiper.slideTo(selectIndex, 0, false)
+                $(".perview__btn-warp--index").html(selectIndex + "/" + slideList.length)
+
+                $(".perview .video__model").remove()
+
+                $(".perview .video__play").click(function (e) {
+
+                    $(this).hide()
+                    var video = $(this).prev("video")
+                    if (video) {
+                        video.prop("controls", true)[0].play()
+                        video[0].onpause = function () {
+                            $(this).prop("controls", false)
+                            $(this).next().show()
+                        }
+                        video[0].onplay = function () {
+                            $(this).prop("controls", true)
+                            $(this).next().hide()
+                        }
+                        video[0].onclick = function () {
+                            $(this).next().hide()
+                        }
+                    }
+                    return false
+                })
+
+                $(".project__info--close").click(function () {
+                    $(".project__info").removeClass("project__info--active")
+                    $(".perview__btn-warp").show()
+                    return false
+                })
+                $(".project__info").click(function () {
+                    return false
+                })
+                $(".perview__btn-warp").click(function () {
+                    return false
+                })
+                $(".perview__btn-warp--more").click(function () {
+                    $(".perview .swiper-slide-active").find(".project__info").addClass("project__info--active")
+                    $(this).parents(".perview__btn-warp").hide()
+                    return false
+                })
+            }, 200)
+        })
+
+
+        $("embed").each(function () {
+            var $p = $(this).parent()
+            $p.html($p.html())
+        })
     }
 
-    $("embed").each(function () {
-        var $p = $(this).parent()
-        $p.html($p.html())
+
+    $(document).ready(function () {
+        var initIndex = 0, fisrtInitIndex = -1
+
+        var project__list = $(".project__item")
+
+
+        function initOneSwiper() {
+            var project__item = project__list.eq(initIndex)
+            if (fisrtInitIndex > -1) {
+                project__item = project__list.eq(fisrtInitIndex)
+            }
+            if (project__item) {
+                if (project__item.attr("init") == "1") {//标记是否初始化过
+                    initIndex += 1
+                    initOneSwiper()
+                    return
+                }
+                project__item.attr("init", 1)
+                project__item.show()
+                project__item.find("img").each(function () {
+                    $(this).attr("src", $(this).attr("data-src"))
+                })
+
+                var container = $(project__item).find(".swiper-container")[0]
+                new Swiper(container, {
+                    paginationClickable: true,
+                    spaceBetween: 5,
+                    preloadImages: true,
+                    slidesPerView: 'auto',
+                    prevButton: $(project__item).find(".swiper-button-prev"),
+                    nextButton: $(project__item).find(".swiper-button-next"),
+                    updateOnImagesReady: true,
+                    onImagesReady: function () {
+                        if (fisrtInitIndex > -1) {
+                            fisrtInitIndex = -1
+                        } else {
+                            initIndex += 1
+                        }
+                        initOneSwiper()
+                    },
+                });
+                initOther(project__item)
+                if (fisrtInitIndex > -1) {
+                    callBack && callBack()
+                }
+            }
+        }
+
+
+        var id = querySring("id")
+        var callBack = null
+        if (id) {
+            project__list.each(function (index) {
+                if ($(this).attr("id") == id) {
+                    fisrtInitIndex = index
+                    return false
+                }
+            })
+            callBack = function () {
+                $("#" + id).find(".swiper-slide:eq(0)").click()
+            }
+        }
+        initOneSwiper()
     })
 
 </script>
