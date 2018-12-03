@@ -6,7 +6,6 @@ module.exports.home = async(ctx, next)=> {
     await ctx.render('index', {bannerList: banner, router: ctx.request.url, menus: ctx.menus, setting: setting.value})
 }
 
-
 module.exports.teamminus = async(ctx, next)=> {
     let data = await db.WebSetting.findOne({key: 'teamminus'}, 'value.' + ctx.session.language)
     await ctx.render('teamminus', {
@@ -93,6 +92,7 @@ module.exports.list = async(ctx, next)=> {
 module.exports.project = async(ctx, next)=> {
     await queryProject(ctx, next)
 }
+
 module.exports.projectByType = async(ctx, next)=> {
     let type = ctx.params.id
     type = /^[0-9]+$/.test(type) ? type : null

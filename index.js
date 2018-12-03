@@ -78,6 +78,13 @@ app.use(async(ctx, next)=> {
     try {
         await next()
     } catch (e) {
+        console.info(`==================错误开始：[时间:${Date.now()}]=======================\r\n`)
+        console.info(e.message+'\r\n')
+        console.info(e.fileName+'\r\n')
+        console.info(e.lineNumber + '行' + e.columnNumber + '列'+'\r\n')
+        console.info(e.stack+'\r\n')
+        console.info(e)
+        console.info(`\r\n===============================错误结束===============================\r\n\r\n`)
         ctx.body = {status: "50", message: e.message}
     }
 })
