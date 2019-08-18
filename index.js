@@ -10,7 +10,7 @@ const koaBody = require('koa-body')
 const queryString = require('./app/utils/queryString')
 const session = require('koa-generic-session')
 const koaVideo = require("koa-video")
-const utils = require("app/utils")
+const utils = require("./app/utils")
 
 
 let argvs = require('yargs').argv;

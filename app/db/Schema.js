@@ -119,6 +119,7 @@ var ProjectSchema = new Schema({
         url: String
     }],
     time: {type: Number, default: Date.now()},
-    type: Number
+    type: Number,
+    index: {type: Number, default: 0}
 });
 exports.Project = db.model('Project', ProjectSchema);
