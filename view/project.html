@@ -452,10 +452,11 @@
                 $(".perview__btn-warp").show()
 
                 if (!window.swiper) {
-                    window.swiper = new Swiper('.perview .swiper-container', {
+                    window.swiper = new Swiper('.perview .swiper-container', { //详情显示
                         loop: true,
                         nextButton: '.perview .swiper-button-next',
                         prevButton: '.perview .swiper-button-prev',
+                        noSwiping : true,
                         onSlideChangeStart: function (swiper) {
                             var index = swiper.activeIndex
                             if (index == 0) {
