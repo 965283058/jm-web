@@ -1,12 +1,12 @@
 const db = require("../db/Schema");
 
-module.exports.home = async(ctx, next)=> {
+module.exports.home = async (ctx, next) => {
     let banner = await db.HomeBanner.find({status: 1}, 'img').sort({index: 1})
     let setting = await db.WebSetting.findOne({key: 'homeBanner'}, 'value')
     await ctx.render('index', {bannerList: banner, router: ctx.request.url, menus: ctx.menus, setting: setting.value})
 }
 
-module.exports.teamminus = async(ctx, next)=> {
+module.exports.teamminus = async (ctx, next) => {
     let data = await db.WebSetting.findOne({key: 'teamminus'}, 'value.' + ctx.session.language)
     await ctx.render('teamminus', {
         menus: ctx.menus,
@@ -16,10 +16,10 @@ module.exports.teamminus = async(ctx, next)=> {
     })
 }
 
-module.exports.people = async(ctx, next)=> {
+module.exports.people = async (ctx, next) => {
     let data = await db.Prople.find({status: 1}, 'img ' + ctx.session.language).sort({index: 1})
     let peoples = []
-    data.forEach((item)=> {
+    data.forEach((item) => {
         peoples.push({
             img: ctx.serverOrigin + item.img,
             name: item[ctx.session.language].name,
@@ -32,10 +32,10 @@ module.exports.people = async(ctx, next)=> {
     await ctx.render('people', {proples: peoples, router: ctx.request.url, menus: ctx.menus})
 }
 
-module.exports.joinUs = async(ctx, next)=> {
+module.exports.joinUs = async (ctx, next) => {
     let data = await db.JoinUs.find({status: 1}, ctx.session.language).sort({index: 1})
     let list = []
-    data.forEach(item=> {
+    data.forEach(item => {
         list.push({
             title: item[ctx.session.language].title,
             children: item[ctx.session.language].children
@@ -46,7 +46,7 @@ module.exports.joinUs = async(ctx, next)=> {
     })
 }
 
-module.exports.contact = async(ctx, next)=> {
+module.exports.contact = async (ctx, next) => {
     let result = await db.WebSetting.findOne({"key": 'contact'})
     if (!(result instanceof Error)) {
         await ctx.render('contact', {
@@ -63,8 +63,8 @@ module.exports.contact = async(ctx, next)=> {
     }
 }
 
-module.exports.list = async(ctx, next)=> {
-    let result = await db.Project.find().sort({"time": -1})
+module.exports.list = async (ctx, next) => {
+    let result = await db.Project.find().sort({'index': 1, "time": -1})
     if (!(result instanceof Error)) {
         let list = []
         for (let item of result) {
@@ -89,17 +89,17 @@ module.exports.list = async(ctx, next)=> {
 
 }
 
-module.exports.project = async(ctx, next)=> {
+module.exports.project = async (ctx, next) => {
     await queryProject(ctx, next)
 }
 
-module.exports.projectByType = async(ctx, next)=> {
+module.exports.projectByType = async (ctx, next) => {
     let type = ctx.params.id
     type = /^[0-9]+$/.test(type) ? type : null
     await queryProject(ctx, next, type)
 }
 
-let queryProject = async(ctx, next, type)=> {
+let queryProject = async (ctx, next, type) => {
     let where = {}
     if (type) {
         where.type = type
@@ -109,7 +109,7 @@ let queryProject = async(ctx, next, type)=> {
         let list = []
         for (let item of result) {
             let temp = []
-            item.files.forEach(file=> {
+            item.files.forEach(file => {
                 temp.push({
                     mode: file.mode,
                     url: file.mode != 3 ? ctx.serverOrigin + file.url : file.url
@@ -134,7 +134,7 @@ let queryProject = async(ctx, next, type)=> {
 }
 
 
-module.exports.video = async(ctx, next)=> {
+module.exports.video = async (ctx, next) => {
     let id = ctx.params.id
     let data = await db.Video.findOne({'_id': id})
     await ctx.render('video', {text: data.text, url: data.url})
