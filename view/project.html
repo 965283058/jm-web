@@ -511,7 +511,7 @@
                     var info_top = '<div class="project__info--top"><span class="project__info--name">' + name + '</span><span class="project__info--time">' + time + '</span><span class="project__info--index">' + (index + 1) + '/' + slideList.length + '</span><span class="project__info--close"></span></div>'
                     var info = '<div class="project__info">' + info_top + '<div class="project__info--text">' + content + '</div></div>'
                     var warp = '<div class="swiper-slide--warp">' + info + media + '</div>'
-                    var html = '<div class="swiper-slide">' + warp + '</div>'
+                    var html = '<div class="swiper-slide swiper-no-swiping">' + warp + '</div>'
                     window.swiper.appendSlide(html)
                 })
                 $(".perview iframe").width($(".perview .swiper-wrapper").width())
