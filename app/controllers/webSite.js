@@ -64,7 +64,7 @@ module.exports.contact = async (ctx, next) => {
 }
 
 module.exports.list = async (ctx, next) => {
-    let result = await db.Project.find().sort({'index': 1, "time": -1})
+    let result = await db.Project.find().sort({'index': -1, "time": -1})
     if (!(result instanceof Error)) {
         let list = []
         for (let item of result) {
