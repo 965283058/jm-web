@@ -138,6 +138,21 @@
         color: #FFF;
         text-decoration: none;
     }
+
+    .footer{ 
+        position: fixed;
+        left: 50%;
+        bottom: 0;
+        z-index: 100;
+        color: #FFF;
+        transform: translateX(-50%);
+    }
+    .footer a{
+        font-size: 12px;
+        line-height: 18px;
+        color: #FFF;
+        text-decoration: none;
+    }
 </style>
 <div class="nav">
     <span class="nav__menu-btn"></span>
@@ -225,4 +240,5 @@
         }
 
     })
+    $("body").append('<div class="footer"><a href="http://www.beian.miit.gov.cn/">京ICP备17054689号-1</a></div>')
 </script>
